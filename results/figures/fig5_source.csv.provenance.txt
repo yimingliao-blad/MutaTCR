@@ -1,0 +1,5 @@
+Fig 5: mean mutation-specific AUC0.1 per model x peptide position
+source: results/analysis/mutation_specific_auc.csv (exp3.py)
+rows: 64 = 8 models x 8 positions
+P1 is absent because no P1 substitution has both experimental classes,
+so AUC0.1 is undefined there (a property of the data, not a filter).

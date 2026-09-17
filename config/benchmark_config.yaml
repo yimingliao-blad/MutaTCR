@@ -1,0 +1,131 @@
+# TCRP Benchmark V4 - Main Configuration
+# All paths, settings, and model configurations
+
+project:
+  name: "TCRP Benchmark V4"
+  version: "4.0.0"
+
+# Path configuration (relative to project root)
+# These can be overridden by environment variables:
+# - TCRP_CONDA_PATH
+# - TCRP_MODELS_PATH
+# - TCRP_DATA_PATH
+# - TCRP_OUTPUT_PATH
+paths:
+  conda: "tools/miniconda3"
+  models: "models"
+  data:
+    raw: "data/raw"
+    unified: "data/unified"
+    deduplicated: "data/deduplicated"
+  output: "output"
+  logs: "logs"
+
+# GPU configuration
+gpu:
+  auto_detect: true
+  default_device: 0
+  fallback_to_cpu: true
+
+# Model-specific settings
+models:
+  ERGO:
+    enabled: true
+    timeout: 1800
+    env: "ergo-benchmark"
+    repo: "https://github.com/louzounlab/ERGO.git"
+    training_data: "models/ERGO/data/VDJDB_complete.tsv"
+
+  ERGO2:
+    enabled: true
+    timeout: 1800
+    env: "ergo2-benchmark"
+    repo: "https://github.com/louzounlab/ERGO-II.git"
+    training_data: "models/ERGO2/mcpas_train.csv"
+
+  NetTCR:
+    enabled: true
+    timeout: 600
+    env: "nettcr-benchmark"
+    repo: "https://github.com/mnielLab/NetTCR-2.0.git"
+    training_data: "models/NetTCR/data/train_ab_95_alphabeta.csv"
+
+  NetTCR22:
+    enabled: true
+    timeout: 1800
+    env: "nettcr22-benchmark"
+    repo: "https://github.com/mnielLab/NetTCR-2.2.git"
+    training_data: null  # Uses internal training data
+
+  TITAN:
+    enabled: true
+    timeout: 3600  # Longer timeout for large datasets
+    env: "titan-benchmark"
+    repo: "https://github.com/PaccMann/TITAN.git"
+    training_data: "models/TITAN/datasets/full_data+covid.csv"
+
+  EPACT:
+    enabled: true
+    timeout: 1800
+    env: "epact-benchmark"
+    batch_size: 32  # Reduced for GPU memory constraints
+    gpu_device: 0
+    repo: "https://github.com/GaoLabXDU/EPACT.git"
+    training_data: "models/EPACT/data/PMID-data/all_train.tsv"
+    # EPACT requires additional data downloads
+    zenodo_data:
+      - "https://zenodo.org/records/7779016/files/checkpoints.tar.gz"
+      - "https://zenodo.org/records/7779016/files/data.tar.gz"
+
+  PanPep:
+    enabled: true
+    timeout: 1800
+    env: "PanPep_env"
+    repo: "https://github.com/bm2-lab/PanPep.git"
+    training_data: "models/PanPep/Data/majority_training_dataset.csv"
+    # Best-of-modes configuration
+    best_of_modes: true
+    modes_for_majority: ["majority", "few-shot", "zero-shot"]
+    modes_for_fewshot: ["few-shot", "zero-shot"]
+    modes_for_zeroshot: ["zero-shot"]
+
+  SCEPTR:
+    enabled: true
+    timeout: 300
+    env: "sceptr_env"
+    # SCEPTR installed via pip, no repo clone needed
+    training_data: null  # Uses internal embeddings
+
+# Deduplication settings
+deduplication:
+  mode: "exact_match"  # or "fuzzy_match"
+  fuzzy_max_distance: 3
+  validation_enabled: true  # Validate deduplication success
+
+# Datasets
+datasets:
+  fingerprinting:
+    file: "fingerprinting_unified.csv"
+    enabled: true
+  immrep23:
+    file: "immrep23_unified.csv"
+    enabled: true
+  tettcr:
+    file: "tettcr_unified.csv"
+    enabled: true
+
+# Evaluation settings
+evaluation:
+  partial_auc_max_fpr: 0.1
+  min_samples_per_peptide: 5
+  metrics:
+    - "roc_auc"
+    - "partial_auc"
+    - "pr_auc"
+    - "mean_per_peptide_pauc"
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_enabled: true

@@ -1,0 +1,35 @@
+% TEMPLATE for fig2b - rendered by stages/stage7_figures.py into results/figures/fig2b.tex
+% A DATA placeholder is replaced with the source table's filename; pgfplots finds it via
+% the table search path set by the including document. Edit this file to change the figure.
+\begin{tikzpicture}
+\begin{axis}[
+    width=\linewidth,
+    height=5.6cm,
+    ybar,
+    bar width=11pt,
+    ymin=0,
+    ymax=1.08,
+    ylabel={Mean binder fraction},
+    xlabel={Mutation position},
+    xtick={1,2,3,4,5,6,7,8,9},
+    xticklabels={P1,P2,P3,P4,P5,P6,P7,P8,P9},
+    ytick={0,0.25,0.50,0.75,1.00},
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    nodes near coords,
+    nodes near coords style={
+        font=\tiny,
+        /pgf/number format/fixed,
+        /pgf/number format/precision=2
+    }
+]
+
+% Data: analysis/exp2.py -> experiment2_position_summary.csv (via make_figure_data.py)
+\addplot table[
+    x=position,
+    y=mean_binder_fraction,
+    col sep=comma
+]{{{DATA:fig2b_source.csv}}};
+
+\end{axis}
+\end{tikzpicture}

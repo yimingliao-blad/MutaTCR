@@ -1,0 +1,4 @@
+Supplementary: mean AUC0.1 for R5 substitutions vs all other positions
+source: results/analysis/r5_vs_nonr5_auc_summary.csv (exp3.py)
+experimental binder fraction for reference: R5 0.569 vs non-R5 0.877
+negative difference = the model does worse on R5 substitutions

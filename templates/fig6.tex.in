@@ -1,0 +1,61 @@
+% TEMPLATE for fig6 - rendered by stages/stage7_figures.py into results/figures/fig6.tex
+% A DATA placeholder is replaced with the source table's filename; pgfplots finds it via
+% the table search path set by the including document. Edit this file to change the figure.
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\linewidth,
+    height=5.8cm,
+    ybar,
+    bar width=7pt,
+    ymin=0.45,
+    ymax=0.70,
+    ylabel={Mean AUC$_{0.1}$},
+    xlabel={Model},
+    symbolic x coords={
+        ERGO,
+        EPACT,
+        PanPep,
+        TITAN,
+        NetTCR,
+        NetTCR2.2,
+        ERGO2,
+        SCEPTR
+    },
+    xtick=data,
+    xticklabel style={
+        rotate=25,
+        anchor=east,
+        font=\scriptsize
+    },
+    ytick={0.5,0.55,0.60,0.65,0.70},
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    legend style={
+        at={(0.5,1.04)},
+        anchor=south,
+        legend columns=2,
+        font=\scriptsize,
+        draw=none
+    },
+    grid=major,
+    grid style={draw=gray!15}
+]
+
+% Random-reference line
+\draw[dashed,gray]
+    (axis cs:ERGO,0.5) --
+    (axis cs:SCEPTR,0.5);
+
+% Data: analysis/exp3.py -> r5_vs_nonr5_auc_summary.csv (via make_figure_data.py)
+% R5 mutations
+\addplot table[x=model,y=r5,col sep=comma]
+    {{{DATA:fig6_source.csv}}};
+
+% non-R5 mutations
+\addplot table[x=model,y=non_r5,col sep=comma]
+    {{{DATA:fig6_source.csv}}};
+
+\legend{R5, non-R5}
+
+\end{axis}
+\end{tikzpicture}

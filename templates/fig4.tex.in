@@ -1,0 +1,57 @@
+% TEMPLATE for fig4 - rendered by stages/stage7_figures.py into results/figures/fig4.tex
+% A DATA placeholder is replaced with the source table's filename; pgfplots finds it via
+% the table search path set by the including document. Edit this file to change the figure.
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\linewidth,
+    height=5.8cm,
+    ylabel={Mutation-specific AUC$_{0.1}$},
+    xmin=0.5,
+    xmax=8.5,
+    ymin=0.45,
+    ymax=1.0,
+    xtick={1,2,3,4,5,6,7,8},
+    xticklabels={
+        ERGO,
+        EPACT,
+        PanPep,
+        TITAN,
+        NetTCR,
+        NetTCR2.2,
+        ERGO2,
+        SCEPTR
+    },
+    xticklabel style={
+        rotate=25,
+        anchor=east,
+        font=\scriptsize
+    },
+    ytick={0.5,0.6,0.7,0.8,0.9,1.0},
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    grid=major,
+    grid style={draw=gray!15},
+    boxplot/draw direction=y
+]
+
+% Random-reference line
+\draw[dashed,gray]
+    (axis cs:0.5,0.5) --
+    (axis cs:8.5,0.5);
+
+% Data: analysis/exp3.py -> mutation_specific_auc.csv (via make_figure_data.py).
+% Whiskers are min/max; quartiles use linear interpolation. Row order = draw_position.
+
+% Row order in fig4_mutation_auc_boxstats.csv: ERGO, EPACT, PanPep, TITAN, NetTCR, NetTCR2.2, ERGO2, SCEPTR
+
+\boxfromtable{0}{1}  % ERGO
+\boxfromtable{1}{2}  % EPACT
+\boxfromtable{2}{3}  % PanPep
+\boxfromtable{3}{4}  % TITAN
+\boxfromtable{4}{5}  % NetTCR
+\boxfromtable{5}{6}  % NetTCR2.2
+\boxfromtable{6}{7}  % ERGO2
+\boxfromtable{7}{8}  % SCEPTR
+
+\end{axis}
+\end{tikzpicture}

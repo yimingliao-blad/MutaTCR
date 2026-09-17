@@ -1,0 +1,2 @@
+Fig 5 outline layer: the best model at each position
+computed as the argmax of fig5_source.csv within each position

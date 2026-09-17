@@ -1,0 +1,4 @@
+Supplementary: rows scored per dataset x model
+source: results/analysis/coverage_summary.csv (stage 5C)
+unscored = rows removed for that model by training-overlap de-duplication
+every dataset row is accounted for: scored + unscored = rows

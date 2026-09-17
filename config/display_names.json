@@ -1,0 +1,46 @@
+{
+    "datasets": {
+        "tettcr": "TetTCR-SeqHD",
+        "immrep23": "IMMREP23",
+        "fingerprinting": "FingerPrinting"
+    },
+    "epitope_groups": {
+        "tettcr": {
+            "Viral": "Viral",
+            "self": "Self",
+            "T1D": "T1D"
+        },
+        "immrep23": {
+            "seen": "Seen",
+            "unseen": "Unseen"
+        },
+        "fingerprinting": {
+            "R-5": "R5-APL",
+            "non-R-5": "Non-5-Pos"
+        }
+    },
+    "colors": {
+        "tettcr": {
+            "Viral": "#0000a2",
+            "Self": "#e9c716"
+        },
+        "immrep23": {
+            "Seen": "#2ca02c",
+            "Unseen": "#9467bd"
+        },
+        "fingerprinting": {
+            "R5-APL": "#d62728",
+            "Non-5-Pos": "#1f77b4"
+        }
+    },
+    "models": {
+        "ERGO": "ERGO",
+        "ERGO2": "ERGO-II",
+        "NetTCR": "NetTCR-2.0",
+        "NetTCR22": "NetTCR-2.2",
+        "TITAN": "TITAN",
+        "EPACT": "EPACT",
+        "PanPep": "PanPep",
+        "SCEPTR": "SCEPTR"
+    }
+}

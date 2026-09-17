@@ -1,0 +1,154 @@
+{
+  "table2_overlap":{
+    "headers":[
+      "Model",
+      "Peptide overlap",
+      "Rows with peptide overlap",
+      "Exact CDR3$\\beta$--peptide rows"
+    ],
+    "formats":[
+      "str",
+      "str",
+      "str",
+      "str"
+    ],
+    "align":"lccc",
+    "caption":"Training--benchmark overlap between the Fingerprinting dataset and the training data used by the evaluated prediction models."
+  },
+  "tableS1_overall_metrics":{
+    "headers":[
+      "Model",
+      "Pairs",
+      "Pos.",
+      "Neg.",
+      "Mutations",
+      "Macro AUC$_{0.1}$",
+      "Macro AUPRC",
+      "Pooled AUC$_{0.1}$",
+      "Pooled AUPRC"
+    ],
+    "formats":[
+      "str",
+      "int",
+      "int",
+      "int",
+      "int",
+      "f3",
+      "f3",
+      "f3",
+      "f3"
+    ],
+    "align":"lrrrrcccc",
+    "caption":"Overall benchmark metrics for the eight evaluated models."
+  },
+  "tableS2_position_summary":{
+    "headers":[
+      "Position",
+      "Mutations",
+      "Mean binder fraction",
+      "SD",
+      "Mean log$_2$FC",
+      "Mean $\\Delta$log$_2$FC"
+    ],
+    "formats":[
+      "int",
+      "int",
+      "f3",
+      "f3",
+      "f3",
+      "f3"
+    ],
+    "align":"lrcccc",
+    "caption":"Experimentally observed tolerance at each peptide position."
+  },
+  "tableS3_r5_vs_nonr5":{
+    "headers":[
+      "Model",
+      "R5",
+      "non-R5",
+      "Difference"
+    ],
+    "formats":[
+      "str",
+      "f3",
+      "f3",
+      "f3"
+    ],
+    "align":"lccc",
+    "caption":"Prediction performance for R5 substitutions compared with mutations elsewhere."
+  },
+  "tableS4_tcr_auc":{
+    "headers":[
+      "TCR",
+      "ERGO",
+      "EPACT",
+      "PanPep",
+      "TITAN",
+      "NetTCR",
+      "NetTCR2.2",
+      "ERGO2",
+      "SCEPTR"
+    ],
+    "formats":[
+      "str",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3"
+    ],
+    "align":"lcccccccc",
+    "caption":"Per-TCR discrimination (AUC$_{0.1}$) for each model."
+  },
+  "tableS5_epitope_group":{
+    "headers":[
+      "Epitope group",
+      "ERGO",
+      "EPACT",
+      "PanPep",
+      "TITAN",
+      "NetTCR",
+      "NetTCR2.2",
+      "ERGO2",
+      "SCEPTR"
+    ],
+    "formats":[
+      "str",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3",
+      "f3"
+    ],
+    "align":"lcccccccc",
+    "caption":"Discrimination within each epitope group."
+  },
+  "tableS6_coverage":{
+    "headers":[
+      "Dataset",
+      "Model",
+      "Rows",
+      "Scored",
+      "Unscored",
+      "Positives",
+      "Negatives"
+    ],
+    "formats":[
+      "str",
+      "str",
+      "int",
+      "int",
+      "int",
+      "int",
+      "int"
+    ],
+    "align":"llrrrrr",
+    "caption":"Benchmark coverage per dataset and model."
+  }
+}

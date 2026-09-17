@@ -1,0 +1,55 @@
+% GENERATED from templates/figure_preamble.tex.in - do not edit; rendered to results/figures/figure_preamble.tex.
+% Both the manuscript and the standalone figure images input this, so a fragment never depends on
+% definitions that live somewhere else. Edit this file, not the rendered copy.
+\usepgfplotslibrary{statistics,groupplots}
+\pgfplotsset{compat=1.18}
+
+% Light sequential colormap for experimental log2 fold-change (Fig 2a)
+\pgfplotsset{
+    colormap={expbinding}{
+        rgb255(0cm)=(250,250,250);
+        rgb255(1cm)=(255,242,220);
+        rgb255(2cm)=(254,220,170);
+        rgb255(3cm)=(253,190,120);
+        rgb255(4cm)=(250,145,85);
+        rgb255(5cm)=(225,90,60);
+        rgb255(6cm)=(180,45,40)
+    }
+}
+
+% Light warm colormap for continuous mutation effects
+\pgfplotsset{
+    colormap={warmdelta}{
+        rgb255(0cm)=(245,245,245);
+        rgb255(1cm)=(255,238,214);
+        rgb255(2cm)=(253,204,138);
+        rgb255(3cm)=(252,141,89);
+        rgb255(4cm)=(215,48,31)
+    }
+}
+
+% Colormap for the position x model AUC heatmap (Fig 5)
+\pgfplotsset{
+    colormap={aucmap}{
+        rgb255(0cm)=(250,250,250);
+        rgb255(1cm)=(255,242,220);
+        rgb255(2cm)=(254,220,170);
+        rgb255(3cm)=(253,190,120);
+        rgb255(4cm)=(250,145,85);
+        rgb255(5cm)=(225,90,60)
+    }
+}
+
+% Fig 4 reads its five-number summaries here; \boxfromtable{row}{draw position} draws one box.
+% (Kept in the preamble: \pgfplotstableread and \newcommand inside a figure body would create an
+% empty paragraph and nudge the surrounding text.)
+\pgfplotstableread[col sep=comma]{fig4_source.csv}\boxstats
+\newcommand{\boxfromtable}[2]{%
+  \pgfplotstablegetelem{#1}{lower_whisker}\of\boxstats \edef\blw{\pgfplotsretval}%
+  \pgfplotstablegetelem{#1}{q1}\of\boxstats            \edef\bql{\pgfplotsretval}%
+  \pgfplotstablegetelem{#1}{median}\of\boxstats        \edef\bmd{\pgfplotsretval}%
+  \pgfplotstablegetelem{#1}{q3}\of\boxstats            \edef\bqu{\pgfplotsretval}%
+  \pgfplotstablegetelem{#1}{upper_whisker}\of\boxstats \edef\buw{\pgfplotsretval}%
+  \edef\tmp{\noexpand\addplot+[boxplot prepared={draw position=#2,
+      lower whisker=\blw, lower quartile=\bql, median=\bmd,
+      upper quartile=\bqu, upper whisker=\buw}] coordinates {};}\tmp}

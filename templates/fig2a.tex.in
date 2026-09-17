@@ -1,0 +1,71 @@
+% TEMPLATE for fig2a - rendered by stages/stage7_figures.py into results/figures/fig2a.tex
+% A DATA placeholder is replaced with the source table's filename; pgfplots finds it via
+% the table search path set by the including document. Edit this file to change the figure.
+\begin{tikzpicture}
+\begin{axis}[
+    width=\linewidth,
+    height=7.0cm,
+    xmin=0.5,
+    xmax=171.5,
+    ymin=0.5,
+    ymax=21.5,
+    xlabel={Mutation position in YLQPRTFLL},
+    ylabel={TCR},
+    xtick={10,29,48,67,86,105,124,143,162},
+    xticklabels={P1,P2,P3,P4,P5,P6,P7,P8,P9},
+    ytick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21},
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    point meta min=-1,
+    point meta max=6.5,
+    colormap name=expbinding,
+    colorbar,
+    colorbar style={
+        ylabel={Experimental log$_2$ fold-change},
+        ylabel style={font=\small},
+        yticklabel style={font=\scriptsize}
+    }
+]
+
+\addplot[
+    scatter,
+    only marks,
+    mark=square*,
+    mark size=1.75pt,
+    scatter src=explicit
+]
+table[
+    x=x,
+    y=tcr_index,
+    meta=log2foldchange,
+    col sep=comma
+]
+{{{DATA:fig2a_source.csv}}};
+
+% Position boundaries
+\draw[dashed,thin,gray]
+    (axis cs:19.5,0.5) -- (axis cs:19.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:38.5,0.5) -- (axis cs:38.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:57.5,0.5) -- (axis cs:57.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:76.5,0.5) -- (axis cs:76.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:95.5,0.5) -- (axis cs:95.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:114.5,0.5) -- (axis cs:114.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:133.5,0.5) -- (axis cs:133.5,21.5);
+
+\draw[dashed,thin,gray]
+    (axis cs:152.5,0.5) -- (axis cs:152.5,21.5);
+
+\end{axis}
+\end{tikzpicture}

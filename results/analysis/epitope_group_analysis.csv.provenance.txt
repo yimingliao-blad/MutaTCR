@@ -1,0 +1,4 @@
+stage 5B: per epitope group x model
+source: build/merged/fingerprinting_all_models.csv
+groups: non-R-5, R-5
+rows: 16 - all kept; AUC01 empty where a group has a single experimental class

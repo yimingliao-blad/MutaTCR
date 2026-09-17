@@ -1,0 +1,51 @@
+% GENERATED - edit templates/fig7a.tex.in and re-run stage 7, not this file.
+% GENERATED from templates/fig7a.tex.in by stages/stage7_figures.py into results/figures/fig7a.tex
+% A DATA placeholder is replaced with the source table's filename; pgfplots finds it via
+% the table search path set by the including document. Edit this file to change the figure.
+\begin{tikzpicture}
+\begin{axis}[
+    width=\linewidth,
+    height=6.0cm,
+    xlabel={Experimental disruption},
+    ylabel={Mean AUC$_{0.1}$ across models},
+    xmin=1.2,
+    xmax=5.0,
+    ymin=0.47,
+    ymax=0.82,
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    grid=major,
+    grid style={draw=gray!15}
+]
+
+% Random-reference level
+\draw[dashed,gray]
+    (axis cs:1.2,0.5) --
+    (axis cs:5.0,0.5);
+
+% One point per AUC-eligible mutation
+\addplot[
+    only marks,
+    mark=*,
+    mark size=1.8pt
+]
+table[
+    x=Experimental_Disruption,
+    y=Mean_AUC01,
+    col sep=comma
+]{fig7_source.csv};
+
+% Optional linear trend line
+\addplot[
+    no marks,
+    thick
+]
+table[
+    x=Experimental_Disruption,
+    y={create col/linear regression={y=Mean_AUC01}},
+    col sep=comma
+]
+{fig7_source.csv};
+
+\end{axis}
+\end{tikzpicture}%

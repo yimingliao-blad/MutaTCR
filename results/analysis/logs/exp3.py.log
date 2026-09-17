@@ -1,0 +1,73 @@
+
+Processing ERGO from table ERGO...
+
+Processing EPACT from table EPACT...
+
+Processing PanPep from table PanPep...
+
+Processing TITAN from table TITAN...
+
+Processing NetTCR from table NetTCR...
+
+Processing NetTCR2.2 from table NetTCR22...
+WARNING: NetTCR2.2: 342 mutant rows do not have a valid reference measurement.
+
+Processing ERGO2 from table ERGO2...
+
+Processing SCEPTR from table SCEPTR...
+
+========================================
+Cross-model mutation analysis
+========================================
+Experimental disruption vs mean AUC01:
+  Spearman rho = -0.723
+  p = 1.608e-19
+  Pearson r = -0.655
+  p = 3.547e-15
+
+Binder-loss fraction vs mean AUC01:
+  Spearman rho = -0.876
+  p = 6.66e-37
+
+========================================
+Per-model correlations
+========================================
+    Model  N_Mutations  Spearman_Rho_Disruption  Spearman_P_Disruption  Spearman_Rho_BinderLoss  Spearman_P_BinderLoss
+     ERGO          113                -0.477741           8.756616e-08                -0.627979           9.718902e-14
+    EPACT          113                -0.538699           7.519081e-10                -0.602356           1.690481e-12
+   PanPep          113                -0.517308           4.445009e-09                -0.697113           9.796566e-18
+    TITAN          113                -0.318794           5.787260e-04                -0.403254           9.487682e-06
+   NetTCR          113                -0.429206           2.100777e-06                -0.546544           3.796357e-10
+NetTCR2.2          113                -0.677624           1.688872e-16                -0.669974           4.869266e-16
+    ERGO2          113                 0.013315           8.886824e-01                -0.150630           1.112689e-01
+   SCEPTR          113                 0.314593           6.898689e-04                 0.427660           2.306396e-06
+
+========================================
+R5 vs non-R5 summary
+========================================
+    Model R5_Status  Mean_AUC01  Median_AUC01  SD_AUC01  N_Mutations
+     ERGO        R5    0.567718      0.578947  0.050684           19
+     ERGO    non-R5    0.659580      0.628483  0.130901           94
+    EPACT        R5    0.513513      0.478469  0.050200           19
+    EPACT    non-R5    0.651791      0.614662  0.139110           94
+   PanPep        R5    0.505947      0.473923  0.042271           19
+   PanPep    non-R5    0.641601      0.670008  0.156066           94
+    TITAN        R5    0.588026      0.605263  0.052198           19
+    TITAN    non-R5    0.619222      0.619883  0.081839           94
+   NetTCR        R5    0.550981      0.531100  0.037005           19
+   NetTCR    non-R5    0.620294      0.619883  0.105805           94
+NetTCR2.2        R5    0.488778      0.473684  0.033783           19
+NetTCR2.2    non-R5    0.613864      0.532164  0.152425           94
+    ERGO2        R5    0.548254      0.526316  0.051147           19
+    ERGO2    non-R5    0.553613      0.529086  0.065793           94
+   SCEPTR        R5    0.518812      0.513158  0.027384           19
+   SCEPTR    non-R5    0.535685      0.507422  0.098906           94
+
+Generated files:
+  mutation_experimental_severity.csv
+  mutation_specific_auc.csv
+  severity_vs_prediction_auc.csv
+  severity_auc_correlations_by_model.csv
+  severity_vs_cross_model_auc.csv
+  r5_vs_nonr5_auc_summary.csv
+  fig_severity_vs_mean_auc.csv

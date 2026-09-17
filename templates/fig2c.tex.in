@@ -1,0 +1,33 @@
+% TEMPLATE for fig2c - rendered by stages/stage7_figures.py into results/figures/fig2c.tex
+% A DATA placeholder is replaced with the source table's filename; pgfplots finds it via
+% the table search path set by the including document. Edit this file to change the figure.
+\begin{tikzpicture}
+\begin{axis}[
+    width=\linewidth,
+    height=5.6cm,
+    ybar,
+    bar width=22pt,
+    ymin=0,
+    ymax=1.0,
+    ylabel={Mean binder fraction},
+    symbolic x coords={R5,non-R5},
+    xtick=data,
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    nodes near coords,
+    nodes near coords style={
+        font=\small,
+        /pgf/number format/fixed,
+        /pgf/number format/precision=3
+    }
+]
+
+% Data: analysis/exp2.py -> experiment2_r5_summary.csv (via make_figure_data.py)
+\addplot table[
+    x=group,
+    y=mean_binder_fraction,
+    col sep=comma
+]{{{DATA:fig2c_source.csv}}};
+
+\end{axis}
+\end{tikzpicture}

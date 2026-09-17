@@ -1,0 +1,4 @@
+Fig 3: overall Macro AUC0.1 per model
+source: results/analysis/experiment1_overall_metrics.csv (exp1.py)
+rows: 8 models, ascending by Macro AUC0.1 (bar order)
+Each model's Macro AUC0.1 averages its AUC-eligible mutations.
