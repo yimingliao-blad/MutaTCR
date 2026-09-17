@@ -11,13 +11,14 @@ offline. This stage exists to say so out loud, and to run inference when the mod
   python3 stages/stage3_inference.py --run       # run the models (needs weights + environments)
 """
 import argparse
+import subprocess
 import sys
 from pathlib import Path
 
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from stages.common import DATASETS, MODELS, SCORES, banner, die, need, set_seeds  # noqa: E402
+from stages.common import DATASETS, MODELS, REPO, SCORES, banner, die, need, set_seeds  # noqa: E402
 
 
 def main():
@@ -49,6 +50,14 @@ def main():
         print(f"  {ds}: {len(s)} rows x {len(MODELS)} models; "
               f"rows without a score: { {k: v for k, v in miss.items() if v} or 'none'}")
     print("\nstage 3 ok (nothing to run; scores are committed)")
+    models = REPO / "models"
+    if models.exists():
+        print("\nmodel repositories under models/ (setup/validate_models.py for detail):")
+        sys.stdout.flush()   # the child writes straight to the pipe; keep the order readable
+        subprocess.run([sys.executable, str(REPO / "setup" / "validate_models.py")])
+    else:
+        print("\nTo run inference yourself: ./setup/fetch_models.sh   then   "
+              "python3 setup/validate_models.py   (docs/INFERENCE.md)")
     return 0
 
 

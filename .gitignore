@@ -26,3 +26,6 @@ results/figures/*.provenance.txt
 results/tables/*_source.csv
 results/tables/*_source.csv.provenance.txt
 results/tables/_table_specs.json
+
+# Model repositories fetched by setup/fetch_models.sh (stage 3 only; multiple GB)
+models/

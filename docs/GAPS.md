@@ -27,6 +27,21 @@ The delivered `fp.db` and the one stage 4 rebuilds differ in the text of `log2fo
 of 3,612 rows: the original runner re-serialised the float with fewer digits. Numerically the two
 agree within 1e-12, and every published number reproduces.
 
+## What the training-overlap screen actually compared
+
+Table 2 reports overlap between the benchmark and each model's training data. Two caveats that the
+numbers alone do not show (`src/data_processing/deduplicate.py`, `analysis/overlap.py`):
+
+- **EPACT** was screened against `sample/VDJdb-GLCTLVAML.csv`, the sample of training data published
+  with the model, not its full training set — that is not in the public release. Its "0/172 peptides"
+  row therefore means *no overlap with the published sample*.
+- **SCEPTR** has no training file to screen: `deduplicate.py` hard-codes empty sets for it, so its
+  row is "no overlap" by construction, not by measurement.
+- The other six models were screened against the training files their repositories ship.
+
+`config/benchmark_config.yaml` previously named an EPACT training path that does not exist in the
+release (`data/PMID-data/all_train.tsv`); it now names the file the code reads.
+
 ## Scope
 The benchmark is one HLA-A*02:01-restricted epitope (YLQPRTFLL) and 21 TCRs, single substitutions
 only. The IMMREP23 and TetTCR-SeqHD datasets are included in full because the pipeline and the

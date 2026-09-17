@@ -11,9 +11,17 @@ python3 checks/check_dependencies.py # what you have vs what the results were ma
 ./run_all.sh                         # stages 1-7, the checks, then the manuscript PDF
 ```
 
-Nothing reaches outside this directory. The only step that cannot run here is model inference — it
-needs ~10 GB of published model weights — so its outputs are committed and everything downstream is
-rebuilt from them. See [docs/INFERENCE.md](docs/INFERENCE.md).
+Nothing reaches outside this directory. The only step that cannot run here is model inference — the
+eight predictors are third-party — so its outputs are committed and everything downstream is rebuilt
+from them. To run inference yourself, fetch the models from their public repositories:
+
+```bash
+./setup/fetch_models.sh            # clone the eight predictors into models/
+./setup/fetch_epact_data.sh        # EPACT's checkpoints and data (Zenodo)
+python3 setup/validate_models.py   # what is ready, what is missing
+```
+
+See [docs/INFERENCE.md](docs/INFERENCE.md).
 
 ## The pipeline
 
@@ -121,6 +129,7 @@ analysis/    the three published analyses (exp1-3) and the training-overlap anal
 templates/   figure templates and the shared figure preamble - edit these
 results/     analysis tables; per-table and per-figure source data, LaTeX and images
 manuscript/  main.tex, the bibliography, and the framework drawing
+setup/       fetching the third-party models (sources, pinned commits, validation)
 checks/      the checks above
 docs/        reproducibility, inference requirements, data sources, provenance, known gaps
 assets/      the two drawings the supplementary compound figure uses

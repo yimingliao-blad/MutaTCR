@@ -55,7 +55,8 @@ models:
     timeout: 1800
     env: "nettcr22-benchmark"
     repo: "https://github.com/mnielLab/NetTCR-2.2.git"
-    training_data: null  # Uses internal training data
+    # deduplicate.py and overlap.py screen against this file from the NetTCR-2.2 repository.
+    training_data: "models/NetTCR22/data/nettcr_2_2_full_dataset.csv"
 
   TITAN:
     enabled: true
@@ -70,8 +71,12 @@ models:
     env: "epact-benchmark"
     batch_size: 32  # Reduced for GPU memory constraints
     gpu_device: 0
-    repo: "https://github.com/GaoLabXDU/EPACT.git"
-    training_data: "models/EPACT/data/PMID-data/all_train.tsv"
+    # The GaoLabXDU URL used during development now 404s; this is the live repository.
+    repo: "https://github.com/zhangyumeng1sjtu/EPACT.git"
+    # What the de-duplication and overlap analyses actually read (src/data_processing/deduplicate.py
+    # and analysis/overlap.py). It is EPACT's published SAMPLE of training data, not its full
+    # training set, which the release does not include - see docs/GAPS.md.
+    training_data: "models/EPACT/sample/VDJdb-GLCTLVAML.csv"
     # EPACT requires additional data downloads
     zenodo_data:
       - "https://zenodo.org/records/7779016/files/checkpoints.tar.gz"
