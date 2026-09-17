@@ -27,7 +27,8 @@ SOURCES = REPO / "setup" / "model_sources.tsv"
 #   weights:  read by the runner at inference time
 EXPECTED = {
     "ERGO":     {"training": ["data/VDJDB_complete.tsv"], "weights": []},
-    "ERGO2":    {"training": ["mcpas_train.csv", "Samples/mcpas_train_samples.pickle"], "weights": []},
+    "ERGO2":    {"training": ["Samples/mcpas_train_samples.pickle"],
+                 "weights": ["TCR_Autoencoder/tcra_ae_dim_100.pt", "TCR_Autoencoder/tcrb_ae_dim_100.pt"]},
     "NetTCR":   {"training": ["data/train_ab_95_alphabeta.csv"], "weights": []},
     "NetTCR22": {"training": ["data/nettcr_2_2_full_dataset.csv"], "weights": []},
     "TITAN":    {"training": ["datasets/full_data+covid.csv"], "weights": []},
@@ -36,7 +37,7 @@ EXPECTED = {
                              "checkpoints/pretrained/paired-cdr3-model-medium.pt",
                              "data/hla_library.json"]},
     "PanPep":   {"training": ["Data/majority_training_dataset.csv"], "weights": []},
-    "SCEPTR":   {"training": [], "weights": []},   # pip package, embeddings bundled
+    "SCEPTR":   {"training": [], "weights": []},   # the runner imports the pip package
 }
 
 
@@ -46,7 +47,9 @@ def sources():
         if not line or line.startswith("#") or line.startswith("key\t"):
             continue
         key, url, commit, *rest = line.split("\t")
-        rows.append((key, url, commit, rest[0] if rest else ""))
+        date = rest[0] if rest else ""
+        notes = rest[1] if len(rest) > 1 else ""
+        rows.append((key, url, commit, f"{date} {notes}".strip()))
     return rows
 
 
@@ -56,9 +59,6 @@ def main():
     ready = missing = 0
     for key, url, commit, notes in sources():
         d = MODELS_DIR / key
-        if url == "pip:sceptr":
-            print(f"{key:9s} pip package - install with `pip install sceptr` in its environment")
-            continue
         if not d.exists():
             print(f"{key:9s} NOT FETCHED   ./setup/fetch_models.sh {key}")
             missing += 1
@@ -78,6 +78,9 @@ def main():
                 print(f"{'':11s}  {f}")
             if key == "EPACT":
                 print(f"{'':11s}  -> ./setup/fetch_epact_data.sh")
+            if key == "ERGO2":
+                print(f"{'':11s}  -> the TCR autoencoder weights; see setup/model_sources.tsv "
+                      f"(their original source now 404s)")
             missing += 1
         else:
             print(f"{key:9s} ready at {head}")

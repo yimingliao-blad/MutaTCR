@@ -1,0 +1,11 @@
+diff --git a/configs/config-paired-cdr3-pmhc-binding.yml b/configs/config-paired-cdr3-pmhc-binding.yml
+index 722cb07..8112ebf 100644
+--- a/configs/config-paired-cdr3-pmhc-binding.yml
++++ b/configs/config-paired-cdr3-pmhc-binding.yml
+@@ -1,5 +1,5 @@
+ training:
+-  gpu_device: 1
++  gpu_device: 0
+   max_epochs: 50
+   log_dir: logs/paired-cdr3-pmhc-binding/
+   lr: 2.5e-4

@@ -22,10 +22,10 @@ from stages.common import B_MERGED, BUILD, REPO, banner, die, need, set_seeds  #
 OUT = BUILD / "supplementary"
 ASSETS = REPO / "assets"
 
-# name -> (module, callable) in src/visualization
+# name -> (module, callable) in src/visualization.
+# The preprint's compound figure and the seen-dataset boxplot are not here: both need IMMREP23 and
+# TetTCR-SeqHD, which this repository does not carry (docs/GAPS.md).
 FIGURES = {
-    "compound_figure": ("src.visualization.compound_figure", "generate_compound_figure"),
-    "auc_boxplots": ("src.visualization.auc_boxplot", "generate_all_boxplots"),
     "fingerprinting_heatmaps": ("src.visualization.fingerprinting_heatmap", "generate_all_heatmaps"),
     "fingerprinting_dual_heatmaps": ("src.visualization.fingerprinting_dual_heatmap", "generate_all_dual_heatmaps"),
     "tcr_model_heatmaps": ("src.visualization.tcr_model_heatmaps", "generate_tcr_model_heatmaps"),
@@ -50,11 +50,6 @@ def setup_paths():
     pm.VISUALIZATIONS_DIR = OUT            # the attribute the visualisation modules actually read
     pm.HEATMAPS_DIR = OUT / "fingerprinting_heatmaps"
     OUT.mkdir(parents=True, exist_ok=True)
-    # panel (a) of the compound figure and the pipeline overview are drawings, not generated
-    for name in ("Refined Flow.svg", "new_process.png"):
-        src = ASSETS / name
-        if src.exists():
-            shutil.copy2(src, OUT / name)
     pm.get_visualization_file = lambda name: OUT / name
     pm.get_merged_file = lambda dataset: B_MERGED / f"{dataset}_all_models.csv"
     paths_mod._path_manager = pm          # the module-level singleton get_paths() returns

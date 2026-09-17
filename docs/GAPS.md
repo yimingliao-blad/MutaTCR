@@ -65,9 +65,20 @@ Still the authors' calls:
 
 ## Scope
 The benchmark is one HLA-A*02:01-restricted epitope (YLQPRTFLL) and 21 TCRs, single substitutions
-only. The IMMREP23 and TetTCR-SeqHD datasets are included in full because the pipeline and the
-supplementary compound figure cover them, but the manuscript's analyses use the FingerPrinting
-mutation panel.
+only.
+
+This repository carries **only the FingerPrinting mutation panel**. The predecessor pipeline also
+ran IMMREP23 and TetTCR-SeqHD; their raw data, unified tables and scores were removed on 2026-09-17
+because the manuscript does not use them. Removed with them:
+
+- `src/visualization/compound_figure.py` — the earlier preprint's multi-panel figure; its panel (b)
+  pooled the two other datasets.
+- `src/visualization/auc_boxplot.py` — per-peptide boxplots for those datasets.
+- `assets/` — the two drawings only the compound figure used.
+
+`src/` is the upstream benchmark library and still contains three-dataset support (`preprocess_raw.py`,
+the model runners); the pipeline in `stages/` is scoped to one dataset, and `checks/check_repo.py`
+(A5, A6) fails if that quietly changes.
 
 ## Licensing
 - The **code** is MIT (`LICENSE`), chosen by the authors on 2026-09-17. The predecessor working tree

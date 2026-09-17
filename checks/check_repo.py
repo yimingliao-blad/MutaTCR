@@ -100,10 +100,20 @@ def check_a():
     need += [REPO / "data/scores" / f"{ds}_model_scores.csv" for ds in DATASETS]
     need += [REPO / "data/dedup/removed_ids.csv", REPO / "data/overlap/overlap_summary.csv",
              REPO / "data/raw/FingerPrinting/Fingerprinting_TCR_Data_Combined_final.xlsx",
-             REPO / "data/raw/IMMREP23/immref23.csv",
-             REPO / "data/raw/TetTCR-SeqHD/TCR_antigen_binding_sheet.csv"]
+             REPO / "data/raw/FingerPrinting/finger_print.csv",
+             REPO / "data/raw/FingerPrinting/finger_print.xlsx"]
     absent = [str(p.relative_to(REPO)) for p in need if not p.exists()]
     report(not absent, "A4. every committed input the stages need is present", f"absent: {absent}")
+
+
+def check_a5():
+    """The repository covers one dataset; nothing should quietly reintroduce the others."""
+    from stages.common import DATASETS
+    report(DATASETS == ["fingerprinting"], "A5. the pipeline covers the fingerprinting benchmark only",
+           f"DATASETS = {DATASETS}")
+    strays = [str(p.relative_to(REPO)) for p in (REPO / "data").rglob("*")
+              if p.is_file() and any(x in p.name.lower() for x in ("immrep", "tettcr"))]
+    report(not strays, "A6. no IMMREP23 / TetTCR-SeqHD data files remain", f"found: {strays}")
 
 
 def check_b():
@@ -250,6 +260,7 @@ def check_d():
 def main():
     print(f"checking {REPO}\n")
     check_a()
+    check_a5()
     check_b()
     check_c()
     check_d()

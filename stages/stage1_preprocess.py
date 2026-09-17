@@ -26,8 +26,6 @@ def main():
     args = ap.parse_args()
 
     need(RAW / "FingerPrinting" / "Fingerprinting_TCR_Data_Combined_final.xlsx", "FingerPrinting raw workbook")
-    need(RAW / "IMMREP23" / "immref23.csv", "IMMREP23 raw table")
-    need(RAW / "TetTCR-SeqHD" / "TCR_antigen_binding_sheet.csv", "TetTCR binding sheet")
 
     B_UNIFIED.mkdir(parents=True, exist_ok=True)
     banner("stage 1", f"raw -> {B_UNIFIED.relative_to(REPO)}")
@@ -46,7 +44,8 @@ def main():
 
     pre = RawDataPreprocessor()
     pre.paths = paths  # the preprocessor builds its own PathManager; point it at this repo
-    pre.process_all()
+    # process_all() would also build IMMREP23 and TetTCR-SeqHD, which this repository does not carry
+    pre.process_fingerprinting()
 
     ok = True
     for ds in DATASETS:

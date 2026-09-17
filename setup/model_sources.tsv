@@ -2,17 +2,18 @@
 #
 # key       the directory name under models/ that the pipeline expects
 # url       public git repository
-# commit    pinned commit, resolved 2026-09-17. These are NOT the commits that produced the
-#           committed scores in data/scores/ - those were not recorded at the time - so a re-run
-#           from these pins may differ in the last digits. Repin deliberately if you re-run.
+# commit    THE COMMIT THAT WAS ACTUALLY USED, read on 2026-09-17 from the original clones that
+#           produced data/scores/ (git rev-parse HEAD in each). Every one of them is still
+#           fetchable from its repository, including NetTCR22's, which is no longer a branch head.
+# date      that commit's author date
 # notes     anything the clone alone does not give you
 #
-key	url	commit	notes
-ERGO	https://github.com/louzounlab/ERGO.git	5c6fc3719df08c84be83a7f365009cf49b2f23b7	training data ships in the repo (data/VDJDB_complete.tsv)
-ERGO2	https://github.com/louzounlab/ERGO-II.git	748ed5bfa61b0fc1bd049fbe5d26d471063bf49e	training data ships in the repo (mcpas_train.csv)
-NetTCR	https://github.com/mnielLab/NetTCR-2.0.git	4c9acd2772008918f6c7a16b6e5ffa5120a572e9	training data ships in the repo (data/train_ab_95_alphabeta.csv)
-NetTCR22	https://github.com/mnielLab/NetTCR-2.2.git	7cead3fe6dcb539ff8e2d9121586dafca1e059c2	uses internal training data
-TITAN	https://github.com/PaccMann/TITAN.git	1576fa32204a2967c6d35df7aa3f54229c854c12	training data expected at datasets/full_data+covid.csv
-EPACT	https://github.com/zhangyumeng1sjtu/EPACT.git	a907ac589ca9f73b833a07963c93dedd95b8ccab	checkpoints and data come separately: setup/fetch_epact_data.sh (Zenodo). NOTE: the URL in config/benchmark_config.yaml (GaoLabXDU/EPACT) now returns 404; this is the live repository.
-PanPep	https://github.com/bm2-lab/PanPep.git	b44ffb185a5c5fe177bc1e0a77453d6d55cf5e14	training data ships in the repo (Data/majority_training_dataset.csv)
-SCEPTR	pip:sceptr	-	installed with pip into its own environment, no repository to clone
+key	url	commit	date	notes
+ERGO	https://github.com/louzounlab/ERGO.git	5c6fc3719df08c84be83a7f365009cf49b2f23b7	2020-08-26	training data ships in the repo (data/VDJDB_complete.tsv)
+ERGO2	https://github.com/IdoSpringer/ERGO-II.git	85d320ab03ade33460be9a81ea3a51b8d37cd998	2022-04-01	ALSO NEEDS the TCR autoencoder weights in TCR_Autoencoder/ (tcra_ae_dim_100.pt sha256 716ca55779ce450e568a6e10647e10efb161552a4b6af5445cc07474c0e56a56, tcrb_ae_dim_100.pt sha256 6c21531c5bc215811050699102610cd23128851b59e1c9df4eeb71f1631de5c3); their original source github.com/IdoSpringer/TCR_Autoencoder now 404s. Patch: setup/patches/ergo2-torch-load-map-location.patch
+NetTCR	https://github.com/mnielLab/NetTCR-2.0.git	4c9acd2772008918f6c7a16b6e5ffa5120a572e9	2022-03-29	training data ships in the repo (data/train_ab_95_alphabeta.csv)
+NetTCR22	https://github.com/mnielLab/NetTCR-2.2.git	244bb88a6d246df601ca47d71e01d3b8c17c2ca6	2024-03-27	no longer a branch head upstream; fetch by SHA works (verified)
+TITAN	https://github.com/PaccMann/TITAN.git	1576fa32204a2967c6d35df7aa3f54229c854c12	2025-07-12	training data expected at datasets/full_data+covid.csv
+EPACT	https://github.com/zhangyumeng1sjtu/EPACT.git	a907ac589ca9f73b833a07963c93dedd95b8ccab	2025-09-23	checkpoints and data via setup/fetch_epact_data.sh (Zenodo 10996150). The URL used during development (GaoLabXDU/EPACT) now 404s. Patch: setup/patches/epact-gpu-device.patch
+PanPep	https://github.com/bm2-lab/PanPep.git	b44ffb185a5c5fe177bc1e0a77453d6d55cf5e14	2023-12-03	training data ships in the repo (Data/majority_training_dataset.csv)
+SCEPTR	https://github.com/yutanagano/sceptr.git	4700c79f09b65201265dbac633c3b9fdbfd53ade	2025-03-13	cloned AND importable as the pip package `sceptr`; the runner imports the package

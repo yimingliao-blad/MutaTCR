@@ -46,8 +46,10 @@ PROSE_NAME = {"ERGO": "ERGO", "ERGO2": "ERGO-II", "NetTCR": "NetTCR-2.0", "NetTC
 # Every spelling of a model seen in an input file or a label -> one canonical key.
 CANON = {**{m: m for m in MODELS}, "NetTCR2.2": "NetTCR22", "NetTCR-2.2": "NetTCR22",
          "NetTCR2.0": "NetTCR", "NetTCR-2.0": "NetTCR", "ERGO-II": "ERGO2", "NETTCR22": "NetTCR22"}
-DATASETS = ["fingerprinting", "immrep23", "tettcr"]
-# The manuscript's benchmark.
+# The manuscript uses one benchmark: the YLQPRTFLL mutation panel. The IMMREP23 and
+# TetTCR-SeqHD datasets the predecessor pipeline also carried are out of scope here and their
+# data is not part of this repository (docs/GAPS.md).
+DATASETS = ["fingerprinting"]
 MAIN_DATASET = "fingerprinting"
 REFERENCE_PEPTIDE = "YLQPRTFLL"
 

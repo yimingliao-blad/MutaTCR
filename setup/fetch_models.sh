@@ -17,8 +17,8 @@ MODELS_DIR="${TCRJ_MODELS:-$ROOT/models}"
 
 if [ "${1:-}" = "--list" ]; then
     printf '%-10s %-55s %s\n' KEY URL COMMIT
-    grep -v '^#' "$SOURCES" | grep -v '^key' | grep -v '^$' | while IFS=$'\t' read -r k u c n; do
-        printf '%-10s %-55s %s\n' "$k" "$u" "$c"
+    grep -v '^#' "$SOURCES" | grep -v '^key' | grep -v '^$' | while IFS=$'\t' read -r k u c d n; do
+        printf '%-10s %-45s %s  %s\n' "$k" "$u" "${c:0:12}" "$d"
     done
     exit 0
 fi
@@ -35,12 +35,8 @@ want() {
     return 1
 }
 
-grep -v '^#' "$SOURCES" | grep -v '^key' | grep -v '^$' | while IFS=$'\t' read -r key url commit notes; do
+grep -v '^#' "$SOURCES" | grep -v '^key' | grep -v '^$' | while IFS=$'\t' read -r key url commit cdate notes; do
     want "$key" || continue
-    if [ "$url" = "pip:sceptr" ]; then
-        echo "== $key: installed with pip inside its environment, nothing to clone"
-        continue
-    fi
     target="$MODELS_DIR/$key"
     if [ -d "$target/.git" ]; then
         echo "== $key: already present at $target"
@@ -52,6 +48,19 @@ grep -v '^#' "$SOURCES" | grep -v '^key' | grep -v '^$' | while IFS=$'\t' read -
         git -C "$target" fetch --quiet origin "$commit" 2>/dev/null || true
         git -C "$target" checkout --quiet "$commit"
     fi
+    # the runs that produced data/scores/ used these two one-line environment fixes
+    patch="$ROOT/setup/patches/$(echo "$key" | tr 'A-Z' 'a-z')-"*.patch
+    for pf in $patch; do
+        [ -e "$pf" ] || continue
+        if git -C "$target" apply --check "$pf" 2>/dev/null; then
+            git -C "$target" apply "$pf"
+            echo "   applied $(basename "$pf")"
+        elif git -C "$target" apply --reverse --check "$pf" 2>/dev/null; then
+            echo "   $(basename "$pf") already applied"
+        else
+            echo "   WARNING: $(basename "$pf") does not apply to this checkout"
+        fi
+    done
     have="$(git -C "$target" rev-parse HEAD)"
     printf '%s\t%s\t%s\t%s\t%s\n' "$key" "$url" "$commit" "$have" "$(date -Is)" >> "$MANIFEST"
     echo "   at $have"

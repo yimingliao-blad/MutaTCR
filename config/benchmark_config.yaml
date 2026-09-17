@@ -41,7 +41,9 @@ models:
     timeout: 1800
     env: "ergo2-benchmark"
     repo: "https://github.com/louzounlab/ERGO-II.git"
-    training_data: "models/ERGO2/mcpas_train.csv"
+    # deduplicate.py and overlap.py read the pickled samples; mcpas_train.csv does not exist
+    # in the repository at the pinned commit.
+    training_data: "models/ERGO2/Samples/mcpas_train_samples.pickle"
 
   NetTCR:
     enabled: true
