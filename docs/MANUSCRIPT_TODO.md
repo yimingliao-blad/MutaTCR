@@ -5,8 +5,8 @@ from you. Nothing here was changed in the text — the manuscript still renders 
 
 ---
 
-> The manuscript is maintained outside this repository. Section A is **done** (applied 2026-09-17);
-> B and C are still open.
+> The manuscript is a **separate repository**; line numbers refer to its `main.tex`.
+> Section A is **done** (applied 2026-09-17); B and C are still open.
 
 ## A. DONE — the version blanks are filled
 

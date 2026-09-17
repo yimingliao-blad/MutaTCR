@@ -54,12 +54,12 @@ Run `python3 checks/check_repo.py`:
 - **check B** re-runs stages 6 and 7 and compares the rendered LaTeX with the committed copies.
 
 End to end: a fresh `git clone` plus `./run_all.sh` reproduces the analysis tables, the figure and
-table sources, the LaTeX, and a manuscript PDF **pixel-identical on all 17 pages** to the delivered
-original.
+table sources and the LaTeX byte for byte; compiled against them, the manuscript rendered
+pixel-identical on all 17 pages to the delivered original.
 
 ## One thing that is deliberately not byte-reproducible
 
-A PDF embeds its creation timestamp, so `manuscript/main.pdf` is never byte-identical between two
+A PDF embeds its creation timestamp, so the manuscript PDF is never byte-identical between two
 builds even when nothing changed. Compare rendered pages instead — rasterise both and diff, which is
 how the "pixel-identical on all 17 pages" result above was measured. The same applies to the figure
 PDFs in `results/figures/`. Everything that is *data* — the analysis tables, the source tables, the

@@ -1,159 +1,44 @@
 # MutaTCR
 
-**Benchmarking TCR–Epitope Recognition Models across Antigen Mutations**
+A mutation-aware benchmark for TCR–epitope prediction models: all test peptides are
+single-amino-acid variants of one reference antigen (HLA-A\*02:01–restricted SARS-CoV-2 epitope
+YLQPRTFLL), and eight published predictors are scored against experimentally measured retention or
+loss of TCR recognition — 171 substitutions across 21 TCRs, 3,612 interactions.
 
-Everything behind the manuscript: the raw experimental data, the pipeline that turns it into
-benchmark results, the analyses, and the generated tables, figures and PDF.
+This repository holds the data, the pipeline and the generated figures and tables for the paper
+*Benchmarking TCR–Epitope Recognition Models across Antigen Mutations*. **The manuscript itself is a
+separate repository**; it includes the LaTeX fragments and numbers this one produces under
+`results/`, so every figure, table and quoted value in the paper comes from the data here.
 
-One command rebuilds the whole thing from the raw files:
-
-```bash
-pip install -r requirements.txt      # or: conda env create -f environment.yml
-python3 checks/check_dependencies.py # what you have vs what the results were made with
-./run_all.sh                         # stages 1-7 and the checks
-```
-
-**The manuscript is maintained separately** and is not part of this repository. It includes the
-generated fragments from `results/` — `\input{../results/figures/fig3.tex}` and the macros in
-`results/figures/values.tex` — so point the build at it when you want the PDF:
+## Reproduce
 
 ```bash
-MUTATCR_MANUSCRIPT=/path/to/manuscript ./build_manuscript.sh
+pip install -r requirements.txt       # or: conda env create -f environment.yml
+python3 checks/check_dependencies.py  # what you have vs what the results were made with
+./run_all.sh                          # rebuilds everything, then checks it
 ```
 
-Nothing reaches outside this directory. The only step that cannot run here is model inference — the
-eight predictors are third-party — so its outputs are committed and everything downstream is rebuilt
-from them. To run inference yourself, fetch the models from their public repositories:
+About a minute. It runs the stages in `stages/`:
 
-```bash
-./setup/fetch_models.sh            # clone the eight predictors into models/
-./setup/fetch_epact_data.sh        # EPACT's checkpoints and data (Zenodo)
-python3 setup/validate_models.py   # what is ready, what is missing
-```
+| stage | | |
+|---|---|---|
+| 1 | preprocess | `data/raw/` → the unified benchmark table |
+| 2 | de-duplicate | removes rows overlapping each model's training data |
+| 3 | inference | the eight predictors — **not run here**: needs their weights, so their scores ship in `data/scores/` ([docs/INFERENCE.md](docs/INFERENCE.md)) |
+| 4 | assemble | unified + scores → per-model predictions, a full outer join, `fp.db` |
+| 5 | analyse | benchmark metrics, mutation/position/severity, epitope and TCR tables |
+| 6–7 | tables and figures | each one as a small source table → generated LaTeX → image |
 
-See [docs/INFERENCE.md](docs/INFERENCE.md).
+Then `checks/check_repo.py` verifies the result: nothing reads outside the repo, re-running
+reproduces `results/` byte for byte, no figure carries typed-in numbers, and the claims that depend
+on an argmax still hold. `checks/smoke_test.py` is the 7-second version.
 
-## The pipeline
+To run the models yourself: `./setup/fetch_models.sh` clones them at the exact commits used
+([docs/INFERENCE.md](docs/INFERENCE.md)). No step that produces a published number uses randomness
+([docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)).
 
-| stage | does | reads | writes |
-|---|---|---|---|
-| 1 `stage1_preprocess.py` | raw experiment → one unified table per dataset | `data/raw/` | `build/unified/` (compared against `data/unified/`) |
-| 2 `stage2_dedup.py` | removes rows overlapping each model's training data | `data/unified/`, `data/dedup/removed_ids.csv` | `build/dedup/<MODEL>/` |
-| 3 `stage3_inference.py` | the eight predictors score every row | model weights *(not in repo)* | `data/scores/` **(committed)** |
-| 4 `stage4_assemble.py` | assembles the analysis inputs | `data/unified/`, `data/scores/` | `build/predictions/`, `build/merged/`, `build/fp.db` |
-| 5 `stage5_analysis.py` | benchmark metrics, mutation/position/severity, epitope + TCR tables | `build/fp.db`, `build/merged/` | `results/analysis/` |
-| 6 `stage6_tables.py` | `--prepare` source table → `--render` LaTeX | `results/analysis/` | `results/tables/*_source.csv`, `*.tex` |
-| 7 `stage7_figures.py` | `--prepare` source table → `--render` LaTeX + image | `results/analysis/`, `templates/` | `results/figures/*_source.csv`, `*.tex`, `*.pdf`, `*.png`, `values.tex` — what the manuscript includes |
-| 8 `stage8_supplementary_figures.py` | the exploratory figure suite (optional) | `build/merged/` | `build/supplementary/` |
+## Licence
 
-### What is committed, and what is rebuilt
-
-Committed: the inputs (`data/`) and the **rendered** outputs — `results/figures/*.tex`, the figure
-images, `results/tables/*.tex` and `values.tex`. The manuscript itself lives elsewhere.
-
-Rebuilt, not committed (all of it in under a minute): `build/`, the analysis tables
-(`results/analysis/`) and the per-table/per-figure source CSVs. So run the pipeline once after
-cloning — `./run_all.sh` does it, and `build_manuscript.sh` stops with that instruction if the
-figure sources are not there yet.
-
-## Tables and figures: source table, LaTeX, image
-
-Every table and figure is built in two steps, so you can review or change one without going back to
-the raw results:
-
-1. **`--prepare`** writes a small source table — `results/figures/fig3_source.csv` is 8 rows — beside
-   a `.provenance.txt` naming its input and recording anything it dropped.
-2. **`--render`** turns *only that table* into `fig3.tex` (what the manuscript includes) and
-   `fig3.pdf` / `fig3.png` (a standalone image for review).
-
-To change a figure, edit `templates/<fig>.tex.in` (axes, styling, labels) or its source table, then
-re-run stage 7. The rendered `.tex` files say "GENERATED" at the top; edits there are overwritten.
-The manuscript contains no data of its own: it includes these fragments and the `\val…` macros in
-`results/figures/values.tex`.
-
-## Data, and what is kept
-
-Rows are never silently dropped. De-duplication removes a row *for one model*, so:
-
-- `data/scores/<dataset>_model_scores.csv` keeps every row with an empty cell where a model has no score.
-- `build/merged/<dataset>_all_models.csv` is a **full outer join**: every unified row, plus
-  `n_models_scored` and `all_models_scored`.
-- Narrowing to complete or ROC-eligible rows happens in stage 6/7, where the count lands in that
-  artifact's `.provenance.txt`.
-
-Redundancy was removed rather than copied: per-model prediction files repeat the unified columns,
-and the merged tables are derivable, so both are regenerated by stage 4 instead of committed. The
-committed data is 1.2 MB: the raw FingerPrinting inputs, the unified table, the model scores, the
-removed-row IDs and the overlap result.
-
-| dataset | rows | models | rows missing a score |
-|---|---|---|---|
-| fingerprinting (the manuscript's benchmark) | 3,612 | 8 | NetTCR2.2: 2 |
-
-One dataset only. The predecessor pipeline also carried IMMREP23 and TetTCR-SeqHD; the manuscript
-does not use them, so neither their data nor the two supplementary figures that needed them are here
-(`docs/GAPS.md`). `src/` is the upstream benchmark library and still *supports* three datasets — the
-pipeline in `stages/` is scoped to one.
-
-## Checks
-
-```bash
-python3 checks/smoke_test.py    # ~10 s: does the pipeline still wire together?
-python3 checks/check_repo.py    # ~1 min: standalone, reproducible, consistent, deterministic
-```
-
-The smoke test runs the real stages on the manuscript's dataset into a scratch directory — never
-into `build/` or `results/` — and checks the things that would break quietly: the outer join keeping
-every row, the analyses producing in-range metrics, a figure still reading its source table rather
-than carrying numbers, and one figure compiling from its own data. It is the fast answer to "did I
-break something"; `check_repo.py` is the thorough one.
-
-- **standalone** — no tracked file reads a path outside the repo; every include and every plotted
-  table exists; every committed input the stages need is present.
-- **reproducible** — re-running stages 6 and 7 into a temp tree reproduces `results/` byte for byte.
-- **consistent** — every macro the manuscript uses is defined, no figure carries typed-in data, and
-  the claims that depend on an argmax or an ordering still hold in the data.
-- **accounted for** — `scored + unscored = rows` for every dataset and model.
-
-Verified 2026-09-17: stage 1 rebuilds all three unified tables identically from raw data; the
-rebuilt `fp.db` is numerically identical to the delivered one (only `log2foldchange` text formatting
-differs, within 1e-12); the analyses reproduce the published figure CSVs to 8.9e-16; and the compiled
-PDF is pixel-identical to the delivered manuscript on all 17 pages.
-
-## Reproducibility
-
-No step that produces a published number draws a random value: stages 1, 2, 4, 5, 6 and 7 are
-deterministic arithmetic and joins. `stages/common.py` sets `SEED = 42` and every stage calls
-`set_seeds()` anyway, so anything added later is repeatable by default. The exception is model
-inference (stage 3), which is third-party and samples internally — seeded, but GPU inference is not
-bitwise reproducible from a seed alone, which is why its scores are committed as data.
-
-`checks/check_repo.py` proves it rather than asserting it: stage 5 run twice is byte-identical
-(check E), and any random draw introduced into the stages fails check F. Details and the version
-evidence: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
-
-## Licence and data
-
-The code is MIT (`LICENSE`; scope in `NOTICE`). That does **not** cover the experimental data in `data/raw/`, which
-comes from previously published studies and stays under its original terms — each file, its source
-and its citation are listed in [docs/DATA.md](docs/DATA.md). Confirm redistribution is permitted
-before publishing, and cite the original studies for the measurements.
-
-## Layout
-
-```
-data/        raw inputs, unified tables, model scores, removed-row IDs, overlap result, PROVENANCE.tsv
-stages/      the numbered pipeline
-src/         the benchmark library (preprocessing, de-duplication, model runners, visualisation)
-analysis/    the three published analyses (exp1-3) and the training-overlap analysis
-templates/   figure templates and the shared figure preamble - edit these
-results/     analysis tables; per-table and per-figure source data, LaTeX and images
-setup/       fetching the third-party models (verified commits, patches, validation)
-checks/      the checks above
-docs/        reproducibility, inference requirements, data sources, provenance, known gaps
-```
-
-Before submitting, work through [docs/MANUSCRIPT_TODO.md](docs/MANUSCRIPT_TODO.md).
-Known gaps are in [docs/GAPS.md](docs/GAPS.md); where the data came from is in
-[docs/DATA.md](docs/DATA.md), [docs/PROVENANCE.md](docs/PROVENANCE.md) and `data/PROVENANCE.tsv`;
-randomness and library versions are in [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
+MIT — see [LICENSE](LICENSE). It covers the code only. The experimental data in `data/raw/` comes
+from previously published studies and keeps its original terms ([docs/DATA.md](docs/DATA.md)); the
+model weights are third-party ([NOTICE](NOTICE)).
