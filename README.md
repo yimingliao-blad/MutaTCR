@@ -1,4 +1,6 @@
-# Benchmarking TCR–Epitope Recognition Models across Antigen Mutations
+# MutaTCR
+
+**Benchmarking TCR–Epitope Recognition Models across Antigen Mutations**
 
 Everything behind the manuscript: the raw experimental data, the pipeline that turns it into
 benchmark results, the analyses, and the generated tables, figures and PDF.
