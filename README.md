@@ -144,6 +144,7 @@ checks/      the checks above
 docs/        reproducibility, inference requirements, data sources, provenance, known gaps
 ```
 
+Before submitting, work through [docs/MANUSCRIPT_TODO.md](docs/MANUSCRIPT_TODO.md).
 Known gaps are in [docs/GAPS.md](docs/GAPS.md); where the data came from is in
 [docs/DATA.md](docs/DATA.md), [docs/PROVENANCE.md](docs/PROVENANCE.md) and `data/PROVENANCE.tsv`;
 randomness and library versions are in [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
