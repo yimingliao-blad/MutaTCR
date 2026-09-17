@@ -57,6 +57,14 @@ End to end: a fresh `git clone` plus `./run_all.sh` reproduces the analysis tabl
 table sources, the LaTeX, and a manuscript PDF **pixel-identical on all 17 pages** to the delivered
 original.
 
+## One thing that is deliberately not byte-reproducible
+
+A PDF embeds its creation timestamp, so `manuscript/main.pdf` is never byte-identical between two
+builds even when nothing changed. Compare rendered pages instead — rasterise both and diff, which is
+how the "pixel-identical on all 17 pages" result above was measured. The same applies to the figure
+PDFs in `results/figures/`. Everything that is *data* — the analysis tables, the source tables, the
+rendered LaTeX — is byte-reproducible, and that is what the checks compare.
+
 ## Library versions
 
 The committed results were produced with Python 3.9.24, pandas 2.3.3, numpy 2.0.2, scipy 1.13.1,
