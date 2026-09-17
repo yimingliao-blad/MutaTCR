@@ -38,7 +38,9 @@ differently (owner, 2026-09-17):
   VDJdb data — 6 peptides x 300 samples, with negatives generated 1:5. There is no released training
   set to screen against, so `deduplicate.py` carries empty sets for it deliberately.
 - **EPACT** was **retrained** for this work, so the file the screen uses is the data that model was
-  trained on rather than a third-party corpus.
+  trained on rather than a third-party corpus. The retrained weights are not distributed; the
+  training code, configuration and seed are (docs/INFERENCE.md), so the model is reproduced rather
+  than downloaded.
 
 The other six models were screened against the training files their repositories ship, all of which
 are present in the clones that produced `data/scores/`.

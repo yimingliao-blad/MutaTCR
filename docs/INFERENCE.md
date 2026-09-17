@@ -57,6 +57,30 @@ python3 stages/stage3_inference.py --run
 stops and says what is missing. `create_runner()` raises on an unknown model or a failed import — it
 used to fall back to a runner that emits random numbers (see docs/REPRODUCIBILITY.md).
 
+## Two of the eight are not used as released models
+
+**EPACT was retrained for this work.** The retrained weights are **not distributed** — the code and
+the configuration that produce them are here, so they can be reproduced rather than downloaded:
+
+- entry point: EPACT's own `scripts/train/train_tcr_pmhc_binding.py`
+- configuration: written by `src/model_runners/epact_runner.py` (`_create_config`), which sets
+  50 max epochs, lr 2.5e-4, weight decay 1e-2, 5 warm-up epochs, cosine schedule, patience 20,
+  non-binding ratio 5, SimCLR contrastive loss (coefficient 0.3, temperature 0.5, margin 0.4),
+  train batch size 100, **seed 42**
+- starting point: the pretrained `pmhc-BA-model-medium.pt` and `paired-cdr3-model-medium.pt` from
+  the Zenodo archive (`setup/fetch_epact_data.sh`)
+- training data: `data/binding/Paired-TCR/` from the same archive
+- result: `paired-cdr3-pmhc-binding/paired-cdr3-pmhc-binding-model-fold-1.pt`, which is what the
+  prediction runner passes as `--model_location`
+
+Because the model is retrained on that corpus, the training/benchmark overlap screen for EPACT is
+run against that same training data — see `docs/GAPS.md`.
+
+**SCEPTR is not a pretrained classifier here.** `src/model_runners/sceptr_runner.py` embeds TCRs
+with the released encoder and then fits a KNN or random-forest head at run time on VDJdb data
+(6 peptides x 300 samples, negatives generated 1:5, `random_state=42`). Nothing to download and
+nothing to carry: the fit is seeded and repeats itself on each run.
+
 ## The same requirement applies to two other steps
 
 - **De-duplication** (`stages/stage2_dedup.py --recompute`) re-screens the benchmark against each
