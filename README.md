@@ -85,8 +85,15 @@ and the overlap result.
 ## Checks
 
 ```bash
-python3 checks/check_repo.py
+python3 checks/smoke_test.py    # ~10 s: does the pipeline still wire together?
+python3 checks/check_repo.py    # ~1 min: standalone, reproducible, consistent, deterministic
 ```
+
+The smoke test runs the real stages on the manuscript's dataset into a scratch directory — never
+into `build/` or `results/` — and checks the things that would break quietly: the outer join keeping
+every row, the analyses producing in-range metrics, a figure still reading its source table rather
+than carrying numbers, and one figure compiling from its own data. It is the fast answer to "did I
+break something"; `check_repo.py` is the thorough one.
 
 - **standalone** — no tracked file reads a path outside the repo; every include and every plotted
   table exists; every committed input the stages need is present.
