@@ -42,6 +42,27 @@ numbers alone do not show (`src/data_processing/deduplicate.py`, `analysis/overl
 `config/benchmark_config.yaml` previously named an EPACT training path that does not exist in the
 release (`data/PMID-data/all_train.tsv`); it now names the file the code reads.
 
+## Before publishing
+
+Mechanical cleanups already done: the Zotero `file =` fields (74 of them, carrying an author's local
+paths) were stripped from `references.bib`, and `data/PROVENANCE.tsv` now names the source tree
+rather than the machine it was built on. Neither changes the compiled manuscript.
+
+Still the authors' calls:
+
+- **`manuscript/main.tex` line ~512** says the exact software/checkpoint version per model "will be
+  added after implementation verification". That information now exists:
+  `setup/model_sources.tsv` pins a commit per model. Note that those pins were resolved 2026-09-17
+  and are *not* the commits that produced the committed scores, which were never recorded.
+- **The abstract** says code and data "will be made publicly available upon publication" — replace
+  with the repository URL once it has one.
+- **Author emails** appear in a commented block in `main.tex`; fine if intended, worth a look.
+- **`data/raw/TetTCR-SeqHD/Kevin's Publication TCRs Updated.xlsx`** carries a person's first name in
+  the filename and is referenced by `src/utils/paths.py`. Renaming means touching the code, so it is
+  left as is.
+- **Table 2's caveats** (EPACT screened against a published sample, SCEPTR by construction) are
+  recorded above; decide whether the Methods should say so explicitly.
+
 ## Scope
 The benchmark is one HLA-A*02:01-restricted epitope (YLQPRTFLL) and 21 TCRs, single substitutions
 only. The IMMREP23 and TetTCR-SeqHD datasets are included in full because the pipeline and the
