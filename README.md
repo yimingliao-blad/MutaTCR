@@ -134,7 +134,7 @@ evidence: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
 
 ## Licence and data
 
-The code is MIT (`LICENSE`). That does **not** cover the experimental data in `data/raw/`, which
+The code is MIT (`LICENSE`; scope in `NOTICE`). That does **not** cover the experimental data in `data/raw/`, which
 comes from previously published studies and stays under its original terms — each file, its source
 and its citation are listed in [docs/DATA.md](docs/DATA.md). Confirm redistribution is permitted
 before publishing, and cite the original studies for the measurements.

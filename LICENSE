@@ -19,12 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-The MIT terms above cover the CODE in this repository (stages/, src/, analysis/,
-checks/, templates/, and the build scripts).
-
-They do NOT cover the experimental data under data/raw/, which comes from
-previously published studies and remains under its original terms, nor the
-manuscript text and figures. See docs/DATA.md.

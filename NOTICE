@@ -1,0 +1,12 @@
+MutaTCR — scope of the MIT licence in LICENSE
+
+The MIT terms cover the CODE in this repository: stages/, src/, analysis/, checks/, setup/,
+templates/ and the build scripts.
+
+They do NOT cover:
+
+  * the experimental data under data/raw/, which comes from previously published studies and
+    remains under its original terms — see docs/DATA.md for each file, its source and citation;
+  * the manuscript, which is maintained separately and is not part of this repository;
+  * the third-party model implementations and weights fetched by setup/fetch_models.sh, each of
+    which carries its own licence (see setup/model_sources.tsv and docs/INFERENCE.md).
