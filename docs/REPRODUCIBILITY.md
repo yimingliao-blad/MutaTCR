@@ -69,8 +69,8 @@ rendered LaTeX — is byte-reproducible, and that is what the checks compare.
 
 The committed results were produced with Python 3.9.24, pandas 2.3.3, numpy 2.0.2, scipy 1.13.1,
 scikit-learn 1.6.1 (full list in `requirements.txt`). The same pipeline under pandas 3.0.1,
-scipy 1.17.1 and scikit-learn 1.8.0 gave the same numbers to **8.9e-16** and a byte-identical
-manuscript, so the results are not balanced on one version of anything. `checks/check_dependencies.py`
+scipy 1.17.1 and scikit-learn 1.8.0 gave the same numbers to **8.9e-16**, and a manuscript whose
+pages render identically, so the results do not rest on one version of anything. `checks/check_dependencies.py`
 prints what you have beside what was used.
 
 The one place a version *does* show through is float formatting, not arithmetic: the original model

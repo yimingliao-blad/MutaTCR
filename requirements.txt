@@ -2,7 +2,7 @@
 #
 # The committed results in results/ were produced with the versions marked "used:". The same
 # numbers also came out under pandas 3.0.1 / scipy 1.17.1 / scikit-learn 1.8.0, agreeing to
-# 8.9e-16 and giving a byte-identical manuscript, so nearby versions are fine - and
+# 8.9e-16 and rendering an identical manuscript, so nearby versions are fine - and
 # checks/check_repo.py will tell you if yours are not.
 pandas>=1.3           # used: 2.3.3
 numpy>=1.20           # used: 2.0.2
