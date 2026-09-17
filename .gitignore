@@ -29,3 +29,6 @@ results/tables/_table_specs.json
 
 # Model repositories fetched by setup/fetch_models.sh (stage 3 only; multiple GB)
 models/
+
+# internal authoring artifacts, not part of the published repository
+*.completeness.json
