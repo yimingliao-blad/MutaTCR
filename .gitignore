@@ -12,3 +12,4 @@ manuscript/p3.log
 __pycache__/
 *.pyc
 .DS_Store
+.claude/
