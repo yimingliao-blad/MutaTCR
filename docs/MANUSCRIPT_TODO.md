@@ -70,25 +70,30 @@ template. `\date{}` is also empty (line 55).
 
 ## C. Claims worth a second look before submission
 
-### C7. Table 2 — two of the eight rows mean something different from the others
-- **EPACT** was screened against `sample/VDJdb-GLCTLVAML.csv`, the *sample* of training data the
-  model publishes, not its full training set, which is not in the public release. Its "0/172" row
-  therefore means "no overlap with that sample".
-- **SCEPTR** has no training file to screen at all: `src/data_processing/deduplicate.py` hard-codes
-  empty sets for it, so its "0/172" is by construction rather than by measurement.
+### C7. The Methods describe all eight models as used "as released" — two were not
 
-The Methods (§"Model-Specific Training–Benchmark Overlap Control") currently describe one uniform
-procedure. Consider one sentence distinguishing these two.
+Line ~420: *"For each model, we used the publicly released pretrained implementation and followed the
+corresponding inference procedure."* That holds for six of the eight. It does not describe:
+
+- **SCEPTR**, whose classifier is **fitted here**: the runner embeds TCRs with the pretrained
+  encoder and trains a KNN/random-forest head on VDJdb data (6 peptides x 300 samples, negatives
+  1:5). Its predictions come from a classifier this pipeline trained, not a released one.
+- **EPACT**, which was **retrained** for this work.
+
+This matters more than wording: a reader comparing eight "off-the-shelf" predictors would take the
+two fitted models to be the same kind of thing as the six released ones. One or two sentences in
+§"Evaluated TCR--Epitope Prediction Models" would settle it, and it also explains why Table 2's rows
+for those two models come from different training data than the rest.
 
 ### C8. What happened to the overlapping rows is described loosely
-Line ~538: the NetTCR-2.2 overlap "was recorded explicitly and taken into account during
+Line ~551: the NetTCR-2.2 overlap "was recorded explicitly and taken into account during
 leakage-aware evaluation." Concretely, the two matching rows were **excluded from NetTCR-2.2's
-scoring only** — it is evaluated on 3,610 of the 3,612 interactions, the other seven models on all
-3,612. Stating that makes the per-model denominators explicit.
+scoring only** - it is evaluated on 3,610 of the 3,612 interactions, the other seven models on all
+3,612. Stating that makes the per-model denominators explicit. (Owner: not a problem in itself.)
 
 ### C9. Model versions in the Methods text
-§"Evaluated TCR–Epitope Prediction Models" says the "publicly released pretrained implementation"
-was used for each model. With A1 filled, you can point at the exact commits.
+With Table 1 filled, the same paragraph can point at the exact commits instead of "publicly
+released pretrained implementation".
 
 ---
 

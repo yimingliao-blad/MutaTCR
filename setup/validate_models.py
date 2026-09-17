@@ -32,10 +32,12 @@ EXPECTED = {
     "NetTCR":   {"training": ["data/train_ab_95_alphabeta.csv"], "weights": []},
     "NetTCR22": {"training": ["data/nettcr_2_2_full_dataset.csv"], "weights": []},
     "TITAN":    {"training": ["datasets/full_data+covid.csv"], "weights": []},
+    # paths as the runner uses them: --model_location is relative to the EPACT root
     "EPACT":    {"training": ["sample/VDJdb-GLCTLVAML.csv"],
-                 "weights": ["checkpoints/pretrained/pmhc-BA-model-medium.pt",
-                             "checkpoints/pretrained/paired-cdr3-model-medium.pt",
-                             "data/hla_library.json"]},
+                 "weights": ["paired-cdr3-pmhc-binding/paired-cdr3-pmhc-binding-model-fold-1.pt",
+                             "pretrained/pmhc-BA-model-medium.pt",
+                             "pretrained/paired-cdr3-model-medium.pt",
+                             "hla_library.json", "data/hla_library.json"]},
     "PanPep":   {"training": ["Data/majority_training_dataset.csv"], "weights": []},
     "SCEPTR":   {"training": [], "weights": []},   # the runner imports the pip package
 }

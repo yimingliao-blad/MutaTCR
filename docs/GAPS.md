@@ -27,26 +27,21 @@ The delivered `fp.db` and the one stage 4 rebuilds differ in the text of `log2fo
 of 3,612 rows: the original runner re-serialised the float with fewer digits. Numerically the two
 agree within 1e-12, and every published number reproduces.
 
-## What the training-overlap screen actually compared
+## What the training-overlap screen compared
 
-Table 2 reports overlap between the benchmark and each model's training data. Two caveats that the
-numbers alone do not show (`src/data_processing/deduplicate.py`, `analysis/overlap.py`):
+Table 2 reports overlap between the benchmark and each model's training data. Two of the eight
+models are not used as released pretrained predictors, which is why their rows are produced
+differently (owner, 2026-09-17):
 
-- **EPACT** was screened against `sample/VDJdb-GLCTLVAML.csv`, the sample of training data published
-  with the model, not its full training set — that is not in the public release. Its "0/172 peptides"
-  row therefore means *no overlap with the published sample*.
-- **SCEPTR** has no training file to screen: `deduplicate.py` hard-codes empty sets for it, so its
-  row is "no overlap" by construction, not by measurement.
-- The other six models were screened against the training files their repositories ship.
+- **SCEPTR** is not a pretrained classifier here. `src/model_runners/sceptr_runner.py` embeds TCRs
+  with the pretrained encoder and then **fits a classifier** (KNN or random forest) at run time on
+  VDJdb data — 6 peptides x 300 samples, with negatives generated 1:5. There is no released training
+  set to screen against, so `deduplicate.py` carries empty sets for it deliberately.
+- **EPACT** was **retrained** for this work, so the file the screen uses is the data that model was
+  trained on rather than a third-party corpus.
 
-`config/benchmark_config.yaml` previously named an EPACT training path that does not exist in the
-release (`data/PMID-data/all_train.tsv`); it now names the file the code reads.
-
-## Before publishing
-
-The manuscript checklist moved to [MANUSCRIPT_TODO.md](MANUSCRIPT_TODO.md), with line
-numbers and the model versions filled in. The repository-side cleanups (Zotero paths in the
-bibliography, machine paths in the provenance manifest) are done.
+The other six models were screened against the training files their repositories ship, all of which
+are present in the clones that produced `data/scores/`.
 
 ## Scope
 The benchmark is one HLA-A*02:01-restricted epitope (YLQPRTFLL) and 21 TCRs, single substitutions
