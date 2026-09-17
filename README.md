@@ -6,8 +6,9 @@ benchmark results, the analyses, and the generated tables, figures and PDF.
 One command rebuilds the whole thing from the raw files:
 
 ```bash
-pip install -r requirements.txt
-./run_all.sh                 # stages 1-7, the checks, then the manuscript PDF
+pip install -r requirements.txt      # or: conda env create -f environment.yml
+python3 checks/check_dependencies.py # what you have vs what the results were made with
+./run_all.sh                         # stages 1-7, the checks, then the manuscript PDF
 ```
 
 Nothing reaches outside this directory. The only step that cannot run here is model inference — it
@@ -27,7 +28,15 @@ rebuilt from them. See [docs/INFERENCE.md](docs/INFERENCE.md).
 | 7 `stage7_figures.py` | `--prepare` source table → `--render` LaTeX + image | `results/analysis/`, `templates/` | `results/figures/*_source.csv`, `*.tex`, `*.pdf`, `*.png`, `values.tex` |
 | 8 `stage8_supplementary_figures.py` | the exploratory figure suite (optional) | `build/merged/` | `build/supplementary/` |
 
-`build/` is regenerated and not committed. `data/` and `results/` are.
+### What is committed, and what is rebuilt
+
+Committed: the inputs (`data/`) and the **rendered** outputs — `results/figures/*.tex`, the figure
+images, `results/tables/*.tex`, `values.tex`, and `manuscript/main.pdf`.
+
+Rebuilt, not committed (all of it in under a minute): `build/`, the analysis tables
+(`results/analysis/`) and the per-table/per-figure source CSVs. So run the pipeline once after
+cloning — `./run_all.sh` does it, and `build_manuscript.sh` stops with that instruction if the
+figure sources are not there yet.
 
 ## Tables and figures: source table, LaTeX, image
 
@@ -83,6 +92,25 @@ rebuilt `fp.db` is numerically identical to the delivered one (only `log2foldcha
 differs, within 1e-12); the analyses reproduce the published figure CSVs to 8.9e-16; and the compiled
 PDF is pixel-identical to the delivered manuscript on all 17 pages.
 
+## Reproducibility
+
+No step that produces a published number draws a random value: stages 1, 2, 4, 5, 6 and 7 are
+deterministic arithmetic and joins. `stages/common.py` sets `SEED = 42` and every stage calls
+`set_seeds()` anyway, so anything added later is repeatable by default. The exception is model
+inference (stage 3), which is third-party and samples internally — seeded, but GPU inference is not
+bitwise reproducible from a seed alone, which is why its scores are committed as data.
+
+`checks/check_repo.py` proves it rather than asserting it: stage 5 run twice is byte-identical
+(check E), and any random draw introduced into the stages fails check F. Details and the version
+evidence: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
+
+## Licence and data
+
+The code is MIT (`LICENSE`). That does **not** cover the experimental data in `data/raw/`, which
+comes from previously published studies and stays under its original terms — each file, its source
+and its citation are listed in [docs/DATA.md](docs/DATA.md). Confirm redistribution is permitted
+before publishing, and cite the original studies for the measurements.
+
 ## Layout
 
 ```
@@ -94,9 +122,10 @@ templates/   figure templates and the shared figure preamble - edit these
 results/     analysis tables; per-table and per-figure source data, LaTeX and images
 manuscript/  main.tex, the bibliography, and the framework drawing
 checks/      the checks above
-docs/        inference requirements, provenance, known gaps
+docs/        reproducibility, inference requirements, data sources, provenance, known gaps
 assets/      the two drawings the supplementary compound figure uses
 ```
 
 Known gaps are in [docs/GAPS.md](docs/GAPS.md); where the data came from is in
-[docs/PROVENANCE.md](docs/PROVENANCE.md) and `data/PROVENANCE.tsv`.
+[docs/DATA.md](docs/DATA.md), [docs/PROVENANCE.md](docs/PROVENANCE.md) and `data/PROVENANCE.tsv`;
+randomness and library versions are in [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).

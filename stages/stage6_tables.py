@@ -18,7 +18,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from stages.common import (LABEL, MODELS, PROSE_NAME, R_ANALYSIS, R_TABLES, banner,  # noqa: E402
-                           canon, need, write_provenance)
+                           canon, need, write_provenance, set_seeds)
 
 NPEP = 172  # peptide species in the panel: the reference plus 171 substitutions
 
@@ -196,6 +196,7 @@ def render():
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--prepare", action="store_true")
     ap.add_argument("--render", action="store_true")

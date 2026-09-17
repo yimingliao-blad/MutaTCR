@@ -24,7 +24,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from stages.common import (B_MERGED, B_PRED, DATASETS, DEDUP_IDS, FP_DB, MAIN_DATASET,  # noqa: E402
-                           MODELS, SCORES, UNIFIED, banner, die, need, write_provenance)
+                           MODELS, SCORES, UNIFIED, banner, die, need, write_provenance, set_seeds)
 
 # Column order of the delivered prediction files / fp.db tables.
 PRED_COLS = ["ID", "Peptide", "HLA", "CDR3a", "CDR3b", "Va", "Ja", "Vb", "Jb", "Label",
@@ -32,6 +32,7 @@ PRED_COLS = ["ID", "Peptide", "HLA", "CDR3a", "CDR3b", "Va", "Ja", "Vb", "Jb", "
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", choices=DATASETS, action="append",
                     help="limit to one dataset (repeatable); default: all")

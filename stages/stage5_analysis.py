@@ -27,7 +27,7 @@ from sklearn.metrics import roc_auc_score
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from stages.common import (B_MERGED, FP_DB, MAIN_DATASET, MODELS, OVERLAP, R_ANALYSIS,  # noqa: E402
-                           REPO, banner, die, need, write_provenance)
+                           REPO, banner, die, need, write_provenance, set_seeds)
 
 MAX_FPR = 0.1
 
@@ -154,6 +154,7 @@ def coverage_and_overlap():
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     R_ANALYSIS.mkdir(parents=True, exist_ok=True)
     run_published_analyses()
     epitope_and_tcr_tables()

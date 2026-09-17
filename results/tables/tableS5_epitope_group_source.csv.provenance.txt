@@ -1,3 +1,0 @@
-Supplementary: AUC0.1 per epitope group x model
-source: results/analysis/epitope_group_analysis.csv (stage 5B)
-groups are the dataset's own Epitope_Group labels (R-5 vs the rest)

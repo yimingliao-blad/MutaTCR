@@ -1,4 +1,0 @@
-Fig 7a/7b: experimental severity vs mean AUC0.1 across models
-source: results/analysis/fig_severity_vs_mean_auc.csv (exp3.py)
-rows: 113 AUC-eligible mutations; both panels read this one table
-Mean_AUC01 averages the eight models for that mutation.

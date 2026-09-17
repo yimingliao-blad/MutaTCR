@@ -15,10 +15,11 @@ import sys
 import pandas as pd
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent.parent))
-from stages.common import (B_UNIFIED, DATASETS, RAW, REPO, UNIFIED, banner, die, need)  # noqa: E402
+from stages.common import (B_UNIFIED, DATASETS, RAW, REPO, UNIFIED, banner, die, need, set_seeds)  # noqa: E402
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--write-canonical", action="store_true",
                     help="copy the rebuilt tables over data/unified/ (only when you mean to)")

@@ -1,3 +1,0 @@
-Fig 2a: experimental log2 fold-change per TCR x mutation
-source: results/analysis/fig4d_experimental_heatmap.csv (exp2.py)
-rows: 3591 - every measured TCR x mutation pair; nothing dropped

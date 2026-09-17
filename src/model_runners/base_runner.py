@@ -219,21 +219,26 @@ class BaseModelRunner(ABC):
 
 
 class DummyModelRunner(BaseModelRunner):
-    """
-    Dummy model runner for testing purposes.
+    """Test-only runner that produces RANDOM probabilities.
 
-    Generates random predictions.
+    It exists to exercise the plumbing without a real model. It is never returned by
+    create_runner(): ask for it by name, and only in tests. Its output is seeded so a test is
+    repeatable, and is labelled so it cannot be mistaken for a real prediction file.
     """
+
+    RANDOM_SEED = 42
 
     def setup(self) -> bool:
         """Setup dummy model (always succeeds)."""
-        self.logger.info("Dummy model setup complete")
+        self.logger.warning("DummyModelRunner: output is RANDOM and must not be used as a result")
         return True
 
     def predict(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Generate random predictions."""
+        """Generate random predictions from a fixed seed."""
         df_pred = df.copy()
-        df_pred['Prediction_Prob'] = np.random.random(len(df))
+        rng = np.random.default_rng(self.RANDOM_SEED)
+        df_pred['Prediction_Prob'] = rng.random(len(df))
+        df_pred['IS_RANDOM_DUMMY_OUTPUT'] = 1
         return df_pred
 
     def get_required_columns(self) -> List[str]:
@@ -265,8 +270,11 @@ def create_runner(model_key: str, mode: str = "exact_match") -> BaseModelRunner:
     }
 
     if model_key not in runners:
-        logger.warning(f"No specific runner for {model_key}, using DummyRunner")
-        return DummyModelRunner(model_key, mode)
+        # Never fall back to DummyModelRunner here: it emits RANDOM probabilities, which would
+        # look exactly like real predictions downstream. Fail instead.
+        raise ValueError(
+            f"no runner for model {model_key!r}; known models: {', '.join(sorted(runners))}. "
+            "DummyModelRunner produces random numbers and must be requested explicitly.")
 
     # Dynamic import
     module_path, class_name = runners[model_key].rsplit('.', 1)
@@ -276,8 +284,10 @@ def create_runner(model_key: str, mode: str = "exact_match") -> BaseModelRunner:
         runner_class = getattr(module, class_name)
         return runner_class(mode)
     except ImportError as e:
-        logger.warning(f"Could not import runner for {model_key}: {e}")
-        return DummyModelRunner(model_key, mode)
+        # Same reason: a missing dependency must not silently degrade to random predictions.
+        raise ImportError(
+            f"could not import the runner for {model_key} ({e}). Install that model's environment "
+            "(see docs/INFERENCE.md); the pipeline will not substitute random values.") from e
 
 
 if __name__ == "__main__":

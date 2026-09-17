@@ -1,5 +1,0 @@
-stage 5B: per peptide x model
-source: build/merged/fingerprinting_all_models.csv
-rows: 1376 (172 peptides x 8 models) - all kept
-AUC01 empty for 472 cells without both experimental classes
-The reference peptide is included here; the manuscript's mutation analyses exclude it.

@@ -17,10 +17,11 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from stages.common import DATASETS, MODELS, SCORES, banner, die, need  # noqa: E402
+from stages.common import DATASETS, MODELS, SCORES, banner, die, need, set_seeds  # noqa: E402
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", action="store_true", help="actually run the models")
     ap.add_argument("--check", action="store_true", help="report the committed scores (default)")

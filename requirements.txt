@@ -1,13 +1,23 @@
-# Analysis and figure pipeline (stages 1-8). Versions used for the committed results are noted;
-# anything close should reproduce them - the checks in checks/ will tell you if it does not.
-pandas>=1.3          # 3.0.1 used
-numpy>=1.20          # 2.x used
-scipy>=1.7           # 1.17.1 used
-scikit-learn>=1.0    # 1.8.0 used
-matplotlib>=3.4      # stages 7 (image rendering is LaTeX) and 8
-openpyxl>=3.0        # reading the raw .xlsx workbooks in stage 1
-PyYAML>=5.4          # config/benchmark_config.yaml
-Pillow>=8.0          # stage 8 compound figure
-cairosvg>=2.5        # stage 8 compound figure panel (a), an SVG drawing
-# LaTeX is needed for the figure images and the manuscript PDF: a TeX Live install with
-# pgfplots >= 1.18 (pdflatex, bibtex), or Docker with the texlive/texlive image.
+# Analysis and figure pipeline (stages 1-7; stage 8 needs the optional block below).
+#
+# The committed results in results/ were produced with the versions marked "used:". The same
+# numbers also came out under pandas 3.0.1 / scipy 1.17.1 / scikit-learn 1.8.0, agreeing to
+# 8.9e-16 and giving a byte-identical manuscript, so nearby versions are fine - and
+# checks/check_repo.py will tell you if yours are not.
+pandas>=1.3           # used: 2.3.3
+numpy>=1.20           # used: 2.0.2
+scipy>=1.7            # used: 1.13.1   (Spearman correlations, stages 5 and 7)
+scikit-learn>=1.0     # used: 1.6.1    (standardised partial AUC, stage 5)
+openpyxl>=3.0         # used: 3.1.5    (reads the raw .xlsx workbooks in stage 1)
+PyYAML>=5.4           # used: 6.0.3    (config/benchmark_config.yaml)
+
+# Optional - stage 8 supplementary figures only
+matplotlib>=3.4       # used: 3.9.4
+Pillow>=8.0           # used: 11.3.0
+cairosvg>=2.5         # used: 2.8.2
+
+# Python 3.9 or newer (used: 3.9.24).
+#
+# LaTeX, for the figure images and the manuscript PDF: TeX Live with pgfplots >= 1.18 (pdflatex,
+# bibtex), or Docker - build_manuscript.sh falls back to the texlive/texlive image (TeX Live 2026,
+# pgfplots 1.18.2 used).

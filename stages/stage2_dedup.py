@@ -18,10 +18,11 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from stages.common import (B_DEDUP, DATASETS, DEDUP_IDS, MODELS, UNIFIED, banner, die,  # noqa: E402
-                           need, write_provenance)
+                           need, write_provenance, set_seeds)
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--recompute", action="store_true",
                     help="re-screen against each model's training data (requires the model repos)")

@@ -1,3 +1,0 @@
-Fig 6: mean AUC0.1 for R5 substitutions vs all other positions, per model
-source: results/analysis/r5_vs_nonr5_auc_summary.csv (exp3.py)
-rows: 8 models; n_r5 / n_non_r5 give the mutation counts behind each mean

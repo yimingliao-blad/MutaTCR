@@ -29,7 +29,7 @@ from scipy.stats import spearmanr
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from stages.common import (LABEL, MODELS, PROSE_NAME, R_ANALYSIS, R_FIGURES, REPO, banner,  # noqa: E402
-                           canon, die, need, write_provenance)
+                           canon, die, need, write_provenance, set_seeds)
 
 TEMPLATES = REPO / "templates"
 MANUSCRIPT = REPO / "manuscript"
@@ -309,6 +309,7 @@ def build_images(fids):
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--prepare", action="store_true")
     ap.add_argument("--render", action="store_true")

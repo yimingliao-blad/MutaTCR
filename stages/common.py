@@ -52,6 +52,38 @@ MAIN_DATASET = "fingerprinting"
 REFERENCE_PEPTIDE = "YLQPRTFLL"
 
 
+# ---------------------------------------------------------------------------
+# Reproducibility
+#
+# Stages 1, 2, 4, 5, 6 and 7 contain no randomness: they are deterministic arithmetic and table
+# joins, so the published numbers do not depend on a seed (docs/REPRODUCIBILITY.md shows the
+# evidence). set_seeds() is still called at the top of every stage so that anything added later -
+# a sampled control, a bootstrap, a jittered scatter - is repeatable by default rather than by luck.
+SEED = 42
+
+
+def set_seeds(seed: int = SEED) -> int:
+    """Seed every generator this pipeline could reach. Returns the seed for logging."""
+    import random as _random
+    _random.seed(seed)
+    try:
+        import numpy as _np
+        _np.random.seed(seed)
+    except ImportError:
+        pass
+    try:  # only present in the model-inference environments
+        import torch as _torch
+        _torch.manual_seed(seed)
+        if _torch.cuda.is_available():
+            _torch.cuda.manual_seed_all(seed)
+            # bitwise-identical GPU results also need deterministic kernels
+            _torch.backends.cudnn.deterministic = True
+            _torch.backends.cudnn.benchmark = False
+    except ImportError:
+        pass
+    return seed
+
+
 def canon(name: str) -> str:
     if name not in CANON:
         die(f"unknown model label {name!r} - add it to CANON in stages/common.py")

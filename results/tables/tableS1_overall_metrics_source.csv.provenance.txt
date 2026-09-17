@@ -1,3 +1,0 @@
-Supplementary: overall benchmark metrics per model
-source: results/analysis/experiment1_overall_metrics.csv (exp1.py)
-sorted by Macro AUC0.1, descending; every model keeps all of its rows

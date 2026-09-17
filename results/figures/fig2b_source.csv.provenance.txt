@@ -1,3 +1,0 @@
-Fig 2b: mean binder fraction per peptide position
-source: results/analysis/experiment2_position_summary.csv (exp2.py)
-rows: 9 - all nine positions, including P1

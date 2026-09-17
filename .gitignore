@@ -13,3 +13,16 @@ __pycache__/
 *.pyc
 .DS_Store
 .claude/
+
+# --- Regenerated intermediates: committed artifacts are the rendered ones (.tex, images, PDF).
+# Everything below is rebuilt by the stages in under a minute:
+#   stage 5 -> results/analysis/*.csv       (the analysis tables)
+#   stage 6/7 --prepare -> *_source.csv     (the per-table and per-figure source data)
+# Run ./run_all.sh (or the individual stages) before compiling the manuscript.
+results/analysis/
+results/figures/*_source.csv
+results/figures/fig4_values.csv
+results/figures/*.provenance.txt
+results/tables/*_source.csv
+results/tables/*_source.csv.provenance.txt
+results/tables/_table_specs.json

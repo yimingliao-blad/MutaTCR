@@ -1,5 +1,0 @@
-stage 5B: per TCR x model discrimination and agreement with log2 fold-change
-source: build/merged/fingerprinting_all_models.csv
-rows: 168 (21 TCRs x 8 models) - all kept
-AUC01 empty for 40 cells where that TCR's scored rows are all one class
-N_Scored < N_Rows where de-duplication removed a row for that model.

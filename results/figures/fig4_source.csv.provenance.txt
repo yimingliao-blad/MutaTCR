@@ -1,5 +1,0 @@
-Fig 4: five-number summary of mutation-specific AUC0.1 per model
-source: results/analysis/mutation_specific_auc.csv (exp3.py)
-whiskers = min and max (no outlier trimming); quartiles = linear interpolation
-each model summarises the same 113 AUC-eligible mutations
-row order = draw_position = the x order in the figure

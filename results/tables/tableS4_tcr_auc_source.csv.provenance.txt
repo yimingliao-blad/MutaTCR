@@ -1,4 +1,0 @@
-Supplementary: AUC0.1 per TCR x model
-source: results/analysis/tcr_model_analysis.csv (stage 5B)
-empty cell = that TCR's scored rows are all one experimental class, so AUC0.1 is undefined
-the per-TCR Spearman correlations with log2FC are in the source analysis table

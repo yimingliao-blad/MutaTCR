@@ -1,3 +1,0 @@
-Fig 2c: mean binder fraction, R5 substitutions vs all other positions
-source: results/analysis/experiment2_r5_summary.csv (exp2.py)
-rows: 2 groups; the non-R5 group excludes P1 as stated in the Methods

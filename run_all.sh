@@ -14,8 +14,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 PY="${TCRJ_PYTHON:-python3}"
 command -v "$PY" >/dev/null || { echo "python not found: $PY (set TCRJ_PYTHON)"; exit 1; }
-"$PY" -c 'import pandas, numpy, scipy, sklearn, matplotlib, openpyxl' || {
-    echo "missing Python dependencies - see requirements.txt"; exit 1; }
+"$PY" checks/check_dependencies.py    # stops here if something needed is missing
 
 WITH_PDF=1; WITH_SUPP=0
 for a in "$@"; do

@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from stages.common import B_MERGED, BUILD, REPO, banner, die, need  # noqa: E402
+from stages.common import B_MERGED, BUILD, REPO, banner, die, need, set_seeds  # noqa: E402
 
 OUT = BUILD / "supplementary"
 ASSETS = REPO / "assets"
@@ -62,6 +62,7 @@ def setup_paths():
 
 
 def main():
+    set_seeds()   # see stages/common.py: the chain is deterministic; this keeps it that way
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", action="append", choices=sorted(FIGURES), help="run just these")
     ap.add_argument("--list", action="store_true", help="list the available figures and exit")

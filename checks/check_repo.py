@@ -92,7 +92,8 @@ def check_a():
     for t in re.findall(r"\{([A-Za-z0-9_]+\.csv)\}", (R_FIGURES / "figure_preamble.tex").read_text()):
         if not (R_FIGURES / t).exists():
             missing.append(f"figure_preamble.tex -> {t}")
-    report(not missing, "A3. every source table a figure plots exists", f"missing: {missing}")
+    report(not missing, "A3. every source table a figure plots exists",
+           f"missing: {missing} - these are regenerated, not committed: run ./run_all.sh --no-pdf")
 
     # A4: the committed inputs the stages need
     need = [REPO / "data/unified" / f"{ds}_unified.csv" for ds in DATASETS]
@@ -182,6 +183,55 @@ def check_c():
            f"exceptions: {list(piv.index[piv['R5'] >= piv['non-R5']])}")
 
 
+def check_e():
+    """Determinism: run the analysis stage twice and compare every output byte for byte."""
+    import hashlib
+    runs = []
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        for i in (1, 2):
+            out = td / f"run{i}"
+            (out / "analysis").mkdir(parents=True)
+            script = td / f"go{i}.py"
+            script.write_text(
+                f'import stages.common as c\n'
+                f'c.RESULTS = c.Path(r"{out}")\n'
+                f'c.R_ANALYSIS = c.RESULTS / "analysis"\n'
+                f'import runpy, sys\n'
+                f'sys.argv = ["stage5_analysis.py"]\n'
+                f'runpy.run_path(r"{REPO / "stages" / "stage5_analysis.py"}", run_name="__main__")\n')
+            r = subprocess.run([sys.executable, str(script)], capture_output=True, text=True,
+                               env=dict(os.environ, PYTHONPATH=str(REPO)), cwd=REPO)
+            if r.returncode != 0:
+                report(False, "E. stage 5 is deterministic across runs", r.stderr.strip()[-300:])
+                return
+            runs.append({f.name: hashlib.sha256(f.read_bytes()).hexdigest()
+                         for f in sorted((out / "analysis").glob("*.csv"))})
+        differing = [n for n in runs[0] if runs[0][n] != runs[1].get(n)]
+        report(not differing and runs[0].keys() == runs[1].keys(),
+               f"E. two independent stage-5 runs are byte-identical ({len(runs[0])} tables)",
+               f"differing: {differing}")
+
+
+def check_f():
+    """No unseeded randomness on the path that produces the published numbers."""
+    risky = []
+    for f in sorted((REPO / "stages").glob("*.py")) + sorted((REPO / "analysis").glob("exp*.py")):
+        text = f.read_text()
+        # Drawing random numbers is what matters; seeding them is the fix, not the problem.
+        for m in re.finditer(r"(np\.random\.(?!seed\b)\w+|(?<!\w)random\.(?!seed\b)\w+"
+                             r"|\.sample\(|\.shuffle\(|default_rng\()", text):
+            line = text[:m.start()].count("\n") + 1
+            risky.append(f"{f.relative_to(REPO)}:{line} {m.group(1)}")
+    report(not risky, "F. no randomness on the stages/analysis path that makes the numbers",
+           f"found: {risky}")
+    # the one place random numbers are produced on purpose must not be reachable by accident
+    br = (REPO / "src/model_runners/base_runner.py").read_text()
+    guarded = ("raise ValueError" in br and "raise ImportError" in br
+               and "DummyModelRunner produces random numbers" in br)
+    report(guarded, "F2. create_runner() cannot fall back to the random dummy runner")
+
+
 def check_d():
     cov = pd.read_csv(R_ANALYSIS / "coverage_summary.csv")
     bad = cov[cov.scored + cov.unscored != cov.rows]
@@ -203,6 +253,8 @@ def main():
     check_b()
     check_c()
     check_d()
+    check_e()
+    check_f()
     print()
     if failures:
         print(f"FAIL: {len(failures)} check(s) failed: {failures}")

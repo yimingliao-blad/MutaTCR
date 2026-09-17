@@ -1,4 +1,0 @@
-Supplementary: experimental tolerance per peptide position
-source: results/analysis/experiment2_position_summary.csv (exp2.py)
-all nine positions, P1 included (P1 supports no ROC metric, but its experimental
-  tolerance is the informative observation)

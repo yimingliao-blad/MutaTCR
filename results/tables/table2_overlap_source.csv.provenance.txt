@@ -1,5 +1,0 @@
-Table 2: training/benchmark overlap per model (the manuscript's Table 2)
-source: results/analysis/overlap_summary.csv (overlap analysis; needs the models'
-  training data to recompute, so the result ships with the repo)
-denominator for peptide overlap: 172 peptide species (reference + 171 substitutions)
-row percentages use each model's own total benchmark rows

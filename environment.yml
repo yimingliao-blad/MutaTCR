@@ -1,0 +1,18 @@
+# conda alternative to requirements.txt, for the analysis and figure pipeline (stages 1-8).
+# The model-inference stage needs eight separate environments; see docs/INFERENCE.md.
+name: tcr-manuscript
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.9
+  - pandas>=1.3
+  - numpy>=1.20
+  - scipy>=1.7
+  - scikit-learn>=1.0
+  - matplotlib>=3.4
+  - openpyxl>=3.0
+  - pyyaml>=5.4
+  - pillow>=8.0
+  - cairosvg>=2.5
+  # LaTeX: install TeX Live separately (needs pgfplots >= 1.18 and pdflatex/bibtex), or use the
+  # texlive/texlive Docker image, which build_manuscript.sh falls back to.

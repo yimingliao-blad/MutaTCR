@@ -1,3 +1,0 @@
-Fig 4 backing data: every mutation-specific AUC0.1 behind the box statistics
-source: results/analysis/mutation_specific_auc.csv (exp3.py)
-rows: 113 mutations x 8 models - kept so the boxes can be recomputed

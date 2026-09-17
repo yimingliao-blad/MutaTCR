@@ -33,8 +33,12 @@ only. The IMMREP23 and TetTCR-SeqHD datasets are included in full because the pi
 supplementary compound figure cover them, but the manuscript's analyses use the FingerPrinting
 mutation panel.
 
-## Not decided here
-- **No LICENSE file.** Choosing a licence for the manuscript, the code and the experimental data is
-  the authors' call, not something this consolidation should assume. Add one before publishing.
-- **No remote.** The repository is local; whether the manuscript and data travel together to a
-  public host is the authors' decision.
+## Licensing
+- The **code** is MIT (`LICENSE`), chosen by the authors on 2026-09-17. The predecessor working tree
+  carried GPL-3.0 at its root with no per-file copyright headers; this release is a deliberate
+  relicensing by the copyright holders. If any part of `src/` turns out to derive from GPL'd model
+  code rather than being the authors' own, that decision has to be revisited.
+- The **data** is not covered by that licence: `data/raw/` comes from published studies and keeps its
+  original terms (docs/DATA.md). Confirm redistribution is permitted before publishing.
+- **No remote yet.** Whether the manuscript and data travel together to a public host is the
+  authors' decision.
