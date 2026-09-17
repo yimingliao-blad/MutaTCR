@@ -5,9 +5,13 @@ from you. Nothing here was changed in the text — the manuscript still renders 
 
 ---
 
-## A. Blanks I can now fill (the information exists; say the word)
+> The manuscript is maintained outside this repository. Section A is **done** (applied 2026-09-17);
+> B and C are still open.
 
-### A1. Table 1's "Version" column is empty — line 442 declares it, all eight rows leave it blank
+## A. DONE — the version blanks are filled
+
+### A1. ~~Table 1's "Version" column is empty~~ — filled 2026-09-17
+The column is now "Implementation (commit, date)" and carries the eight verified commits.
 
 The versions are now verified: `setup/model_sources.tsv` records the commit each model was actually
 at when it produced `data/scores/`, read from the original clones, and every one is still fetchable.
@@ -29,12 +33,13 @@ source (`github.com/IdoSpringer/TCR_Autoencoder`) now 404s, and two one-line env
 applied to run the models here (`setup/patches/`: `torch.load(..., map_location='cpu')` for ERGO-II,
 GPU index for EPACT). Neither changes model behaviour, but they are part of the runs.
 
-### A2. Table 1 caption, line 512 — an unfinished promise
+### A2. ~~Table 1 caption — an unfinished promise~~ — replaced 2026-09-17
 
 > "The exact software or checkpoint version used for each model will be added after implementation
 > verification."
 
-Replace once A1 is filled; the versions are no longer pending.
+The caption now explains that most of these implementations have no versioned releases, names
+SCEPTR's tagged release, and points at the deposited scores.
 
 ---
 

@@ -10,7 +10,15 @@ One command rebuilds the whole thing from the raw files:
 ```bash
 pip install -r requirements.txt      # or: conda env create -f environment.yml
 python3 checks/check_dependencies.py # what you have vs what the results were made with
-./run_all.sh                         # stages 1-7, the checks, then the manuscript PDF
+./run_all.sh                         # stages 1-7 and the checks
+```
+
+**The manuscript is maintained separately** and is not part of this repository. It includes the
+generated fragments from `results/` — `\input{../results/figures/fig3.tex}` and the macros in
+`results/figures/values.tex` — so point the build at it when you want the PDF:
+
+```bash
+MUTATCR_MANUSCRIPT=/path/to/manuscript ./build_manuscript.sh
 ```
 
 Nothing reaches outside this directory. The only step that cannot run here is model inference — the
@@ -35,13 +43,13 @@ See [docs/INFERENCE.md](docs/INFERENCE.md).
 | 4 `stage4_assemble.py` | assembles the analysis inputs | `data/unified/`, `data/scores/` | `build/predictions/`, `build/merged/`, `build/fp.db` |
 | 5 `stage5_analysis.py` | benchmark metrics, mutation/position/severity, epitope + TCR tables | `build/fp.db`, `build/merged/` | `results/analysis/` |
 | 6 `stage6_tables.py` | `--prepare` source table → `--render` LaTeX | `results/analysis/` | `results/tables/*_source.csv`, `*.tex` |
-| 7 `stage7_figures.py` | `--prepare` source table → `--render` LaTeX + image | `results/analysis/`, `templates/` | `results/figures/*_source.csv`, `*.tex`, `*.pdf`, `*.png`, `values.tex` |
+| 7 `stage7_figures.py` | `--prepare` source table → `--render` LaTeX + image | `results/analysis/`, `templates/` | `results/figures/*_source.csv`, `*.tex`, `*.pdf`, `*.png`, `values.tex` — what the manuscript includes |
 | 8 `stage8_supplementary_figures.py` | the exploratory figure suite (optional) | `build/merged/` | `build/supplementary/` |
 
 ### What is committed, and what is rebuilt
 
 Committed: the inputs (`data/`) and the **rendered** outputs — `results/figures/*.tex`, the figure
-images, `results/tables/*.tex`, `values.tex`, and `manuscript/main.pdf`.
+images, `results/tables/*.tex` and `values.tex`. The manuscript itself lives elsewhere.
 
 Rebuilt, not committed (all of it in under a minute): `build/`, the analysis tables
 (`results/analysis/`) and the per-table/per-figure source CSVs. So run the pipeline once after
@@ -60,7 +68,7 @@ the raw results:
 
 To change a figure, edit `templates/<fig>.tex.in` (axes, styling, labels) or its source table, then
 re-run stage 7. The rendered `.tex` files say "GENERATED" at the top; edits there are overwritten.
-`manuscript/main.tex` contains no data: it includes the fragments and the `\val…` macros in
+The manuscript contains no data of its own: it includes these fragments and the `\val…` macros in
 `results/figures/values.tex`.
 
 ## Data, and what is kept
@@ -140,7 +148,6 @@ src/         the benchmark library (preprocessing, de-duplication, model runners
 analysis/    the three published analyses (exp1-3) and the training-overlap analysis
 templates/   figure templates and the shared figure preamble - edit these
 results/     analysis tables; per-table and per-figure source data, LaTeX and images
-manuscript/  main.tex, the bibliography, and the framework drawing
 setup/       fetching the third-party models (verified commits, patches, validation)
 checks/      the checks above
 docs/        reproducibility, inference requirements, data sources, provenance, known gaps

@@ -39,9 +39,16 @@ if [ "$WITH_SUPP" = 1 ]; then
 fi
 
 if [ "$WITH_PDF" = 1 ]; then
-    echo
-    echo "=== compiling the manuscript"
-    ./build_manuscript.sh
+    MANUSCRIPT="${MUTATCR_MANUSCRIPT:-$ROOT/manuscript}"
+    if [ -f "$MANUSCRIPT/main.tex" ]; then
+        echo
+        echo "=== compiling the manuscript"
+        ./build_manuscript.sh
+    else
+        echo
+        echo "=== no manuscript found at $MANUSCRIPT - skipping the PDF"
+        echo "    The manuscript is maintained separately; set MUTATCR_MANUSCRIPT to build it."
+    fi
 fi
 
 echo
